@@ -1,15 +1,28 @@
+oc delete -f ./templates/awx/awx-deploy-cr.yml
+oc delete -f ./templates/awx/operator-install.yaml
 
 oc create clusterrolebinding awx-default --clusterrole=cluster-admin --serviceaccount=awx:default
 
-export CLUSTER_NAME=itzroks-270003bu3k-o3v0m0-6ccd7f378ae819553d37d5f2ee142bd6-0000.eu-gb.containers.appdomain.cloud
+oc apply -f ./templates/awx/operator-install.yaml
+oc apply -f ./templates/awx/awx-deploy-cr.yml
+
+while [ `oc get pods -n awx| grep postgres|grep 1/1 | wc -l| tr -d ' '` -lt 1 ]
+do
+      echo "AWX not ready yet. Waiting 15 seconds"
+      sleep 15
+done
+
+export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
 export ADMIN_USER=admin
-export ADMIN_PASSWORD=passw0rd
+export =$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
 export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30840
-export OCP_TOKEN=eyJhbGcxxxxxxxxxOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlbW8tYWRtaW4tdG9rZW4tZ2p2NnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVtby1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjJiYTYzN2JiLTQxM2ItNGIxNi04NmViLTdhMGRiMDAzNzIzZCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlbW8tYWRtaW4ifQ.ZV52WPPkM9LKYAD2_2bHTTtkVqKoxmlceAIp-gM3HJ5SICUdm2xgNQHECSdext6kqyPgJq11iWPAt6vz1c5IUW-NgcLnu1pvYP_lpSNeFR8n2HKYVhnU4ddqzkmWojPjgVJbIYQ_2tJEsm8Ke5tKe_ydjx1Up5nn0Zq5-s_C94bjiNlvISgYgE89iATmkqN5v6Bf8aISMZUeoM0SEOVllbbSImcRzWbB6j9MCy2U6SI0cET7ye6nArU0DzIIADUczYzAHmkuXtVjgMX_6wtbBYRfTiZTYTA8suN97dhBfR-I7JkZYrbzhwQOWqr3eqCvmF2tbCKoWihJuQVryTuPrw
+export OCP_TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6Ilc4R0w5aE03bDdlYVdVZEI1WUhMLXc1bmhSZW1HZVkxSnl3RjVXVFUwTEUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlbW8tYWRtaW4tdG9rZW4tZ2p2NnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVtby1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjJiYTYzN2JiLTQxM2ItNGIxNi04NmViLTdhMGRiMDAzNzIzZCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlbW8tYWRtaW4ifQ.ZV52WPPkM9LKYAD2_2bHTTtkVqKoxmlceAIp-gM3HJ5SICUdm2xgNQHECSdext6kqyPgJq11iWPAt6vz1c5IUW-NgcLnu1pvYP_lpSNeFR8n2HKYVhnU4ddqzkmWojPjgVJbIYQ_2tJEsm8Ke5tKe_ydjx1Up5nn0Zq5-s_C94bjiNlvISgYgE89iATmkqN5v6Bf8aISMZUeoM0SEOVllbbSImcRzWbB6j9MCy2U6SI0cET7ye6nArU0DzIIADUczYzAHmkuXtVjgMX_6wtbBYRfTiZTYTA8suN97dhBfR-I7JkZYrbzhwQOWqr3eqCvmF2tbCKoWihJuQVryTuPrw
 
+echo ADMIN_USER:$ADMIN_USER
+echo ADMIN_PASSWORD:$ADMIN_PASSWORD
+echo AWX_ROUTE:$AWX_ROUTE
 
-
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "CP4WAIOPS Project",
@@ -37,13 +50,13 @@ export PROJECT_ID=$(echo $result|jq ".id")
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "CP4WAIOPS Execution Environment",
     "description": "CP4WAIOPS Execution Environment",
     "organization": null,
-    "image": "niklaushirt/cp4waiops-tools:awx-runner",
+    "image": "niklaushirt/cp4waiops-awx:0.1.1",
     "credential": null,
     "pull": "missing"
 }')
@@ -57,7 +70,7 @@ sleep 15
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Get CP4WAIOPS Logins",
@@ -74,7 +87,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install CP4WAIOPS AI Manager with Demo content",
@@ -91,7 +104,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install Rook Ceph",
@@ -108,7 +121,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install CP4WAIOPS Demo UI",
@@ -125,7 +138,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install LDAP",
@@ -143,7 +156,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 echo $result
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Register LDAP Users",
@@ -160,7 +173,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install RobotShop",
@@ -177,7 +190,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 
 echo $result
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install Turbonomic",
@@ -195,7 +208,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 echo $result
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install Humio",
@@ -213,7 +226,7 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u
 echo $result
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install ELK",
@@ -232,7 +245,7 @@ echo $result
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install ManageIQ",
@@ -251,7 +264,7 @@ echo $result
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install ServiceMesh",
@@ -270,11 +283,11 @@ echo $result
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "Install CP4WAIOPS AI Event",
-    "description": "Install CP4WAIOPS AI Event",
+    "name": "Install CP4WAIOPS AI Event Manager",
+    "description": "Install CP4WAIOPS AI Event Manager",
     "job_type": "run",
     "inventory": 1,
     "project": '$PROJECT_ID',
@@ -292,7 +305,7 @@ exit 1
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install xxxxx",
@@ -311,7 +324,7 @@ echo $result
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install xxxxx",
@@ -362,7 +375,7 @@ exit 1
 
 
 
-result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/credentials/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+result=$(curl -X "POST" "https://$AWX_ROUTE/api/v2/credentials/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "tttt111",
@@ -382,18 +395,18 @@ result=$(curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/credentials/" -u "
 echo $result
 
 
-curl -X "GET" "https://awx-awx.$CLUSTER_NAME/api/v1/authtoken/" 
+curl -X "GET" "https://$AWX_ROUTE/api/v1/authtoken/" 
 
 export user=admin
 export password=passw0rd
 
-curl -k -u $user:$password -X GET "https://awx-awx.$CLUSTER_NAME/api/v2/hosts"
+curl -k -u $user:$password -X GET "https://$AWX_ROUTE/api/v2/hosts"
 
 
 
 
 export CLUSTER_NAME=itzroks-270003bu3k-o3v0m0-6ccd7f378ae819553d37d5f2ee142bd6-0000.eu-gb.containers.appdomain.cloud
-curl -X "POST" "https://awx-awx.$CLUSTER_NAME/api/v2/projects/" -u 'admin:passw0rd' --insecure \
+curl -X "POST" "https://$AWX_ROUTE/api/v2/projects/" -u 'admin:passw0rd' --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "id": 99,
