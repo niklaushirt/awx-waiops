@@ -22,10 +22,16 @@
 
 - hosts: localhost
   #become: true
-  vars_files: ../00_config_cp4waiops.yaml
+  vars_files: ./00_config_cp4waiops.yaml
 
-  roles:  
-    - role: 19_aiops-event-webhook
+  roles: 
+# Placeholder for customization
+    - role: 00_pre
+
+# Run Prerequisites
+    - role: 01_initialization
+
+# Run Roles     - role: 19_aiops-event-webhook
 
       
 
