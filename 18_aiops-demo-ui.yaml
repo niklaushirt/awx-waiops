@@ -28,9 +28,6 @@
 # Placeholder for customization
     - role: 00_pre
 
-# Run Prerequisites
-    - role: 01_initialization
-
 # Run Roles 
     - role: 18_aiops-demo-ui
 

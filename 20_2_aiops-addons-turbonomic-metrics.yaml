@@ -26,8 +26,6 @@
 # Placeholder for customization
     - role: 00_pre
 
-# Run Prerequisites
-    - role: 01_initialization
 
 # Run Roles 
     - role: 20_2_aiops-addons-turbonomic-metrics
