@@ -35,7 +35,6 @@
 
 # Install Add-Ons while CP4WAIOPS is coming up
     - role: 25_aiops-addons-ldap
-      when: INSTALL_LDAP
 
 
 # Wait for Common Services being completely installed
@@ -45,7 +44,6 @@
 
 # Post installation tasks
     - role: 40_aiops-post-ldap-register
-      when: INSTALL_LDAP
 
 
 

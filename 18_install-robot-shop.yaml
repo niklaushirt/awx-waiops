@@ -35,7 +35,6 @@
 # Install Add-Ons while CP4WAIOPS is coming up
 
     - role: 27_aiops-addons-demoapps
-      when: INSTALL_DEMO_APPS
 
 
 

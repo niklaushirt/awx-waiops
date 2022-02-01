@@ -22,7 +22,14 @@
   #become: true
   vars_files: ./00_config_cp4waiops.yaml
 
-  roles:
+  roles: 
+# Placeholder for customization
+    - role: 00_pre
+
+# Run Prerequisites
+    - role: 01_initialization
+
+# Run Roles 
     - role: 02_aiops-get-storage-class
 
     - role: 20_1_aiops-addons-kubeturbo

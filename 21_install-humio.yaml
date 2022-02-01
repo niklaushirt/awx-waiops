@@ -29,7 +29,8 @@
 # Run Prerequisites
     - role: 01_initialization
 
-# Run Roles     - role: 21_aiops-addons-humio
+# Run Roles     
+    - role: 21_aiops-addons-humio
 
 
 

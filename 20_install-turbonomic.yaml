@@ -29,7 +29,8 @@
 # Run Prerequisites
     - role: 01_initialization
 
-# Run Roles     - role: 20_aiops-addons-turbonomic
+# Run Roles     
+    - role: 20_aiops-addons-turbonomic
 
 
 
