@@ -251,7 +251,7 @@ echo "   🚀  Create Job: Install LDAP"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "15_Install LDAP",
+    "name": "115_Install LDAP",
     "description": "Install LDAP and register users",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -279,7 +279,7 @@ echo "   🚀  Create Job: Install RobotShop"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "16_Install RobotShop",
+    "name": "116_Install RobotShop",
     "description": "Install RobotShop",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
