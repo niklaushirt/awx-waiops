@@ -161,11 +161,11 @@ The following Components can be installed:
 || 87_TrainingRunLog | Run the LAD Training once the Indexes are loaded | 
 || 87_TrainingRunSNOW | Run the Similar Incidents and Change Risk Training once the Indexes are loaded | 
 || | | 
-| **Tools** | **Tools** | |  
-|| 91_DebugPatch | Repatch some errors (non destructive) |  |
-|| 99_GetCP4WAIOPSLogins | Get Logins for all Components |  |
-|| optional\_15_InstallLDAP | Already installed by the AI Manager Install |  |
-|| optional\_16_InstallRobotShop | Already installed by the AI Manager Install |  |
+| **Tools** | | |  
+|| 91_DebugPatch | Repatch some errors (non destructive) | 
+|| 99_GetCP4WAIOPSLogins | Get Logins for all Components | 
+|| optional\_15_InstallLDAP | Already installed by the AI Manager Install | 
+|| optional\_16_InstallRobotShop | Already installed by the AI Manager Install | 
 
 
 
