@@ -62,6 +62,9 @@ echo "  📥 Indexes will count up to approx 320000 and 390000 respectively."
 echo "  "
 echo "***************************************************************************************************************************************************"
 
+while true; do oc port-forward statefulset/iaf-system-elasticsearch-es-aiops 9200; done" &
+
+
 echo ""
 ./tools/02_training/scripts/load-es-index.sh
 
