@@ -5,14 +5,22 @@ echo "**************************************************************************
 echo "  "
 
 
+echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Check if AWX is ready"
-while [ `oc get pods -n awx| grep postgres|grep 1/1 | wc -l| tr -d ' '` -lt 1 ]
-do
-      echo "       AWX not ready yet. Waiting 15 seconds"
-      sleep 15
+echo "   🕦  Wait for AWX being ready"
+while : ; do
+      READY=$(curl -s $AWX_URL|grep "Application is not available")
+      if [[  $READY  =~ "Application is not available" ]]; then
+            echo "        AWX not ready yet. Waiting 15 seconds"
+            sleep 30
+      else
+            break
+      fi
 done
+echo "   ✅  OK: AWX ready"
 
+
+echo ""
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🛠️  Initialisation"
@@ -24,10 +32,12 @@ export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
 export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.1
+echo "   ✅  Done"
+
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🛠️  Parameters"
+echo "   🔎  Parameters"
 echo "        🧔 ADMIN_USER:$ADMIN_USER"
 echo "        🔐 ADMIN_PASSWORD:$ADMIN_PASSWORD"
 echo "        🌏 AWX_ROUTE:$AWX_ROUTE"
@@ -62,9 +72,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADM
 if [[ $result =~ " already exists" ]];
 then
     export PROJECT_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Project")|.id')
-    echo "      Already exits with ID:$PROJECT_ID"
+    echo "        Already exits with ID:$PROJECT_ID"
 else
-    echo "      Project created: "$(echo $result|jq ".created")
+    echo "        Project created: "$(echo $result|jq ".created")
     export PROJECT_ID=$(echo $result|jq ".id")
 fi
 
@@ -89,9 +99,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$
 if [[ $result =~ " already exists" ]];
 then
     export INVENTORY_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Install")|.id')
-    echo "      Already exits with ID:$INVENTORY_ID"
+    echo "        Already exits with ID:$INVENTORY_ID"
 else
-echo "      Inventory created: "$(echo $result|tr -d '\n'|jq ".created")
+    echo "        Inventory created: "$(echo $result|tr -d '\n'|jq ".created")
 export INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
 fi
 
@@ -114,9 +124,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environme
 if [[ $result =~ " already exists" ]];
 then
     export EXENV_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Execution Environment")|.id')
-    echo "      Already exits with ID:$EXENV_ID"
+    echo "        Already exits with ID:$EXENV_ID"
 else
-echo "      Executon Environment created: "$(echo $result|jq ".created")
+    echo "        Executon Environment created: "$(echo $result|jq ".created")
 export EXENV_ID=$(echo $result|jq ".id")
 fi 
 
@@ -146,9 +156,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -171,9 +181,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -196,9 +206,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -221,9 +231,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -249,9 +259,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -277,9 +287,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -302,9 +312,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -328,9 +338,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -353,9 +363,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -379,9 +389,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -405,9 +415,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -430,9 +440,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo ""
@@ -455,9 +465,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 
@@ -481,9 +491,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 
 if [[ $result =~ " already exists" ]];
 then
-    echo "      Already exits."
+    echo "        Already exits."
 else
-    echo "      Job created: "$(echo $result|jq ".created")
+    echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
 echo "    "
@@ -492,7 +502,7 @@ echo "    "
 echo "    "
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo " 🚀 AWX Content"
+echo " 🚀 AWX Installed Content"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    "
@@ -532,10 +542,11 @@ echo "    "
 
 
 echo "*****************************************************************************************************************************"
+echo " ✅ DONE"
+echo "*****************************************************************************************************************************"
 
 while true
 do
-	printf "\r    ✅ DONE"
-    sleep 15                              
+    sleep 60000                           
 done
 

@@ -29,8 +29,8 @@ spec:
         app: cp4waiops-installer
     spec:
       containers:
-      - image: niklaushirt/cp4waiops-installer:0.2
-        imagePullPolicy: IfNotPresent
+      - image: niklaushirt/cp4waiops-installer:1.0
+        imagePullPolicy: Always
         name: installer
         command:
         ports:
