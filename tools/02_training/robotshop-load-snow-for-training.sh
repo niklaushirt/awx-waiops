@@ -38,6 +38,7 @@ fi
 # DO NOT EDIT BELOW
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_training/TRAINING_FILES/ELASTIC/
 
 
 echo ""
