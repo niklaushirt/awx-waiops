@@ -15,9 +15,12 @@
   shell: |
     oc get nodes
     oc get routes -n openshift-console console -o jsonpath={.spec.host}
-    echo "test"
-  register: zen_ready
+    echo $(oc get routes -n openshift-console console -o jsonpath={.spec.host})
+  register: k8s_result
 
+- name: DEBUG -              🟢 k8s_result
+  debug: 
+    var: k8s_result
 
 
 
