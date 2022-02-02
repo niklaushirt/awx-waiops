@@ -18,7 +18,7 @@ while : ; do
             break
       fi
 done
-echo "     ✅  OK: AWX ready"
+echo "       ✅  OK: AWX ready"
 
 
 echo ""
@@ -33,7 +33,7 @@ export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
 export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.1
-echo "     ✅  Done"
+echo "       ✅  Done"
 
 
 echo ""

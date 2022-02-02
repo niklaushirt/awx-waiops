@@ -29,7 +29,7 @@ spec:
         app: cp4waiops-installer
     spec:
       containers:
-      - image: niklaushirt/cp4waiops-installer:1.0
+      - image: niklaushirt/cp4waiops-installer:1.2
         imagePullPolicy: Always
         name: installer
         command:
