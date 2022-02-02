@@ -23,7 +23,28 @@ cd awx-waiops| sed 's/^/      /'
 ls -al| sed 's/^/      /'
 
 
-./tools/01_awx-install.sh
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Clusterrole binding"
+oc create clusterrolebinding awx-default --clusterrole=cluster-admin --serviceaccount=awx:default| sed 's/^/      /'
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create AWX Operator"
+oc apply -f ./ansible/templates/awx/operator-install.yaml| sed 's/^/      /'
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create AWX Instance"
+oc apply -f ./ansible/templates/awx/awx-deploy-cr.yml| sed 's/^/      /'
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🕦  Wait for AWX pods ready"
+while [ `oc get pods -n awx| grep postgres|grep 1/1 | wc -l| tr -d ' '` -lt 1 ]
+do
+      echo "       AWX not ready yet. Waiting 15 seconds"
+      sleep 15
+done
 
 
 echo "*****************************************************************************************************************************"
