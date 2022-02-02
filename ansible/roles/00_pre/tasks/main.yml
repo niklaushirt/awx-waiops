@@ -53,7 +53,7 @@
 # *************************************************************************************************************************************************
 - name: LOGIN -              🔐 Check Login credentials
   fail: msg="If you select auto-login, you have to provide Cluster credentials"
-  when: OCP_LOGIN and OCP_URL=="not_configured" and OCP_TOKEN=="not_configured"
+  when: OCP_LOGIN == true and OCP_URL=="not_configured" and OCP_TOKEN=="not_configured"
 
 
 - name: LOGIN -              👨‍💼 Login to cluster
