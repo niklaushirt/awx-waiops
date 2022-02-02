@@ -44,7 +44,7 @@ echo "   🌏 Getting training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_training/TRAINING_FILES/ELASTIC/
 
-while true; do oc port-forward statefulset/iaf-system-elasticsearch-es-aiops 9200; done" &
+while true; do oc port-forward statefulset/iaf-system-elasticsearch-es-aiops 9200; done &
 
 echo ""
 ./tools/02_training/scripts/load-es-index.sh
