@@ -26,7 +26,7 @@ do
       echo "        AWX pods not ready yet. Waiting 15 seconds"
       sleep 15
 done
-echo "   ✅  OK: AWX pods ready"
+echo "     ✅  OK: AWX pods ready"
 
 export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
 export AWX_URL=$(echo "https://$AWX_ROUTE")
@@ -44,7 +44,7 @@ while : ; do
             break
       fi
 done
-echo "   ✅  OK: AWX ready"
+echo "     ✅  OK: AWX ready"
 
 echo ""
 echo ""

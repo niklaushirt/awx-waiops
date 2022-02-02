@@ -4,7 +4,8 @@ echo " 🐥 CloudPak for Watson AIOPs - Configure AWX"
 echo "*****************************************************************************************************************************"
 echo "  "
 
-
+export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
+export AWX_URL=$(echo "https://$AWX_ROUTE")
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🕦  Wait for AWX being ready"
@@ -17,7 +18,7 @@ while : ; do
             break
       fi
 done
-echo "   ✅  OK: AWX ready"
+echo "     ✅  OK: AWX ready"
 
 
 echo ""
@@ -32,7 +33,7 @@ export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
 export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.1
-echo "   ✅  Done"
+echo "     ✅  Done"
 
 
 echo ""
@@ -502,24 +503,24 @@ echo "    "
 echo "    "
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo " 🚀 AWX Installed Content"
+echo " 🔎 AWX Installed Content"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    "
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀 AWX Projects"
+echo "    📥 AWX Projects"
 curl -X "GET" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"| sed 's/^/         /'
 echo "    "
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀 AWX Inventories"
+echo "    📥 AWX Inventories"
 curl -X "GET" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"| sed 's/^/         /'
 echo "    "
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀 AWX Execution Environments"
+echo "    📥 AWX Execution Environments"
 curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"| sed 's/^/         /'
 echo "    "
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀 AWX Job Templates"
+echo "    📥 AWX Job Templates"
 curl -X "GET" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"| sed 's/^/         /'
 echo "    "
 echo "    "
@@ -532,11 +533,11 @@ echo " 🚀 AWX Access"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo " -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    "
-echo "            📥 AWX :"
+echo "     📥 AWX :"
 echo ""
-echo "                🌏 URL:      https://$AWX_ROUTE"
-echo "                🧑 User:     admin"
-echo "                🔐 Password: $(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)"
+echo "         🌏 URL:      https://$AWX_ROUTE"
+echo "         🧑 User:     admin"
+echo "         🔐 Password: $(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)"
 echo "    "
 echo "    "
 
