@@ -1,7 +1,10 @@
 FROM quay.io/ansible/awx-ee:latest
 
 USER 0
-RUN dnf install -y wget jq npm kafkacat
+RUN dnf install -y wget jq npm
+RUN dnf copr enable bvn13/kafkacat
+RUN dnf update
+RUN dnf install kafkacat
 
 # Install Openshift Client
 RUN wget https://github.com/openshift/okd/releases/download/4.9.0-0.okd-2022-01-14-230113/openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz && tar xfvz openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz && mv oc /usr/local/bin && mv kubectl /usr/local/bin/ && rm openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz
