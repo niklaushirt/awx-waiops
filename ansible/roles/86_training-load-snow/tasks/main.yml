@@ -38,6 +38,8 @@
     echo "       "	
     echo "       "	
 
+    while true; do oc port-forward statefulset/$(oc get statefulset | grep es-server-all | awk '{print $1}') 9200; done &
+    
     export NODE_TLS_REJECT_UNAUTHORIZED=0
 
     for actFile in $(ls -1 $WORKING_DIR_ES | grep "json");

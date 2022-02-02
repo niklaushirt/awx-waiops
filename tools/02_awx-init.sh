@@ -319,14 +319,15 @@ else
 fi 
 
 
+
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Install Toolbox"
+echo "   🚀  Create Job: Install CP4WAIOPS Toolbox"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "18_Install CP4WAIOPS Toolbox",
-    "description": "Install CP4WAIOPS Demo UI",
+    "name": "17_Install CP4WAIOPS Toolbox",
+    "description": "Install CP4WAIOPS Toolbox",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -343,6 +344,7 @@ then
 else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
+
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
