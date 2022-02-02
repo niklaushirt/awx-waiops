@@ -136,7 +136,7 @@ The following Components can be installed:
 
 
 | Category| Component  | Description  | 
-|---|---|---|---|
+|---|---|---|
 | **CP4WAIOPS Base Install** |  |  |  
 || **10_InstallCP4WAIOPSAIManagerwithDemoContent** | Base AI Manager with RobotShop and LDAP integration | 
 || **11_InstallCP4WAIOPSAIEventManager** | Base Event Manager  |  
