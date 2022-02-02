@@ -190,6 +190,7 @@ then
     echo "        Already exists."
 else
     echo "        Job created: "$(echo $result|jq ".created")
+    echo $result
 fi 
 
 echo ""
