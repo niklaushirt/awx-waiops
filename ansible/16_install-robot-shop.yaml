@@ -24,6 +24,8 @@
   #become: true
   vars_files: ./00_config_cp4waiops.yaml
 
+
+
   roles: 
 # Placeholder for customization
     - role: 00_pre
