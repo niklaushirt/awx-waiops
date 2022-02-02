@@ -24,14 +24,16 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 
 
 ---------------------------------------------------------------
-# 🐥 Easy Install
+# 🐥 1. Easy Install
 ---------------------------------------------------------------
+
+## 1.1. Platform Install - AWX
 
 
 Please create the following two elements in your OCP cluster.
 
 
-## Connamd Line install
+### 1.1.1. Command Line install
 
 You can run run:
 
@@ -45,7 +47,7 @@ kubectl apply -n default -f create-installer.yaml
 ```
 
 
-## Web UI install
+### 1.1.2. Web UI install
 
 Or you can create them through the OCP Web UI:
 
@@ -102,8 +104,73 @@ spec:
 ```
 
 
+## 2. Provide Entitlement
 
-You can find the AWX login information in the Pod Logs.
+### 2.1. Get the CP4WAIOPS installation token
+
+You can get the installation (pull) token from [https://myibm.ibm.com/products-services/containerlibrary](https://myibm.ibm.com/products-services/containerlibrary).
+
+This allows the CP4WAIOPS images to be pulled from the IBM Container Registry.
+
+<div style="page-break-after: always;"></div>
+
+
+### 2.2. Enter the CP4WAIOPS installation token
+
+1. Open the AWX instance
+2. Select `Inventories`
+3. Select `CP4WAIOPS Install`
+	![K8s CNI](./doc/pics/entitlement1.png)
+4. Click Edit
+5. Replace and uncomment the `ENTITLED_REGISTRY_KEY` 
+	![K8s CNI](./doc/pics/entitlement2.png)
+6. Click Save
+
+
+Yop are now ready to lauch the installations.
+
+
+## 3. Installing Components
+
+The following Components can be installed:
+
+
+| Component  | Description  | Remarks  | 
+|---|---|---|
+| **CP4WAIOPS Base Install** |  |  |
+| **10_InstallCP4WAIOPSAIManagerwithDemoContent** | Base AI Manager with RobotShop and LDAP integration |  |
+| **11_InstallCP4WAIOPSAIEventManager** | Base Event Manager  |  |
+| | |  |
+| **CP4WAIOPS Addons Install** | |  |
+| 17_InstallCP4WAIOPSToolbox | Debugging Toolbox |  |
+| 18_InstallCP4WAIOPSDemoUI | Demo UI to simulate incidents |  |
+| | |  |
+| **Third-party** | |  |
+| 14_InstallRookCeph | |  |
+| 20_InstallTurbonomic | |  |
+| 21_InstallHumio | |  |
+| 22_InstallAWX | |  |
+| 22_InstallELK | |  |
+| 24_InstallManageIQ | |  |
+| 29_InstallServiceMesh | |  |
+| | |  |
+| **Training** | |  |
+| 85_TrainingCreate | Create all training definitions (LAD, TemporalGrouping, Similar Incidents, Change Risk) |  |
+| 86_TrainingLoadLog | Not working yet, please use `./tools/02_training/robotshop-load-logs-for-training.sh` | 💣 |
+| 86_TrainingLoadSNOW | Not working yet, please use `./tools/02_training/robotshop-load-snow-for-training.sh` | 💣 |
+| 87_TrainingRunLog | Run the LAD Training once the Indexes are loaded |  |
+| 87_TrainingRunSNOW | Run the Similar Incidents and Change Risk Training once the Indexes are loaded |  |
+| | |  |
+| **Tools** | |  |
+| 91_DebugPatch | Repatch some errors (non destructive) |  |
+| 99_GetCP4WAIOPSLogins | Get Logins for all Components |  |
+| optional\_15_InstallLDAP | Already installed by the AI Manager Install |  |
+| optional\_16_InstallRobotShop | Already installed by the AI Manager Install |  |
+
+
+# Login Information
+
+You can find the AWX login information in the cp4waiops-installer Pod Logs.
 
 Or run:
 
