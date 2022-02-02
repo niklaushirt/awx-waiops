@@ -60,7 +60,7 @@ echo "            🌏 URL:      $AWX_URL"
 echo "            🧑 User:     admin"
 echo "            🔐 Password: $(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)"
 echo "    
-echo "  ""  
+echo "  "  
 
 echo ""
 echo ""
