@@ -28,7 +28,7 @@
 
 
 # Run Roles 
-    - role: 86_training-load-log
+    - role: 88_training-run-lad
 
 
 

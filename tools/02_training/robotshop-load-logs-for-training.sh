@@ -38,12 +38,17 @@ fi
 # DO NOT EDIT BELOW
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🌏 Getting training files"
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_training/TRAINING_FILES/ELASTIC/
+
+
 # read -p "Decompress Demo Logs? [y,N] " DO_COMM
 # if [[ $DO_COMM == "y" ||  $DO_COMM == "Y" ]]; then
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   📦 Uncompressing log anomaly training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_training/TRAINING_FILES/ELASTIC/
 
 unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs>/dev/null 2>&1
 # else
