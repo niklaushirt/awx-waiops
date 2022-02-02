@@ -28,8 +28,8 @@
 
 
 # Run Roles 
-    - role: 86_training-load-snow
-    - role: 85_training-load
+    - role: 86_training-run-snow
+
 
 
 

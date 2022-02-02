@@ -497,6 +497,140 @@ else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Create"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "85_Training Create",
+    "description": "Training Create",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/85_training-create.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Load Log"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "86_Training Load Log",
+    "description": "Training Load Log",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/86_training-load-log.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Run Log"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "87_Training Run Log",
+    "description": "Training Run Log",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/87_training-run-log.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Load SNOW"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "86_Training Load SNOW",
+    "description": "Training Load SNOW",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/86_training-load-snow.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Run SNOW"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "87_Training Run SNOW",
+    "description": "Training Run SNOW",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/87_training-run-snow.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
 echo "    "
 echo "    "
 echo "    "
