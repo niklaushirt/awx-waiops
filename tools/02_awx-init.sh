@@ -34,6 +34,9 @@ echo "        🌏 AWX_ROUTE:$AWX_ROUTE"
 echo ""
 
 
+sleep 600000
+
+
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure -H 'content-type: application/json' -d $'{"name": "CP4WAIOPS Project","description": "CP4WAIOPS Project","local_path": "","scm_type": "git","scm_url": "'$AWX_REPO'","scm_branch": "","scm_refspec": "","scm_clean": false,"scm_track_submodules": false,"scm_delete_on_update": false,"credential": null,"timeout": 0,"organization": 1,"scm_update_on_launch": false,"scm_update_cache_timeout": 0,"allow_override": false,"default_environment": null}')
 echo $result
 
