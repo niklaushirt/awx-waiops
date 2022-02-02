@@ -126,7 +126,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "10_install-cp4waiops_ai_manager_only_with_demo.yaml",
+    "playbook": "ansible/10_install-cp4waiops_ai_manager_only_with_demo.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -147,7 +147,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "11_install-cp4waiops_event_manager.yaml",
+    "playbook": "ansible/11_install-cp4waiops_event_manager.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -168,7 +168,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "90_aiops-logins.yaml",
+    "playbook": "ansible/90_aiops-logins.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -189,7 +189,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "14_install-rook-ceph.yaml",
+    "playbook": "ansible/14_install-rook-ceph.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -213,7 +213,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "15_install-ldap.yaml",
+    "playbook": "ansible/15_install-ldap.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -237,7 +237,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "16_install-robot-shop.yaml",
+    "playbook": "ansible/16_install-robot-shop.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -258,7 +258,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "17_aiops-demo-ui.yaml",
+    "playbook": "ansible/17_aiops-demo-ui.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -280,7 +280,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "18_aiops-toolbox.yaml",
+    "playbook": "ansible/18_aiops-toolbox.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -301,7 +301,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "20_install-turbonomic.yaml",
+    "playbook": "ansible/20_install-turbonomic.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -323,7 +323,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "21_install-humio.yaml",
+    "playbook": "ansible/21_install-humio.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -345,7 +345,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "22_install-elk-ocp.yaml",
+    "playbook": "ansible/22_install-elk-ocp.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -366,7 +366,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "23_install-awx.yaml",
+    "playbook": "ansible/23_install-awx.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -387,7 +387,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "24_install-manageiq.yaml",
+    "playbook": "ansible/24_install-manageiq.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -409,7 +409,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "29_install-servicemesh.yaml",
+    "playbook": "ansible/29_install-servicemesh.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -459,7 +459,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "xxxxx",
+    "playbook": "ansible/xxxxx",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -478,7 +478,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "xxxxx",
+    "playbook": "ansible/xxxxx",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -626,7 +626,7 @@ https://awx-awx.itzroks-270003bu3k-o3v0m0-6ccd7f378ae819553d37d5f2ee142bd6-0000.
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": 10,
-    "playbook": "90_aiops-logins.yaml",
+    "playbook": "ansible/90_aiops-logins.yaml",
     "scm_branch": "",
     "forks": 0,
     "limit": "",
@@ -668,7 +668,7 @@ https://awx-awx.itzroks-270003bu3k-o3v0m0-6ccd7f378ae819553d37d5f2ee142bd6-0000.
 "job_type": "run",
 "inventory": '$INVENTORY_ID',
 "project": 10,
-"playbook": "90_aiops-logins.yaml",
+"playbook": "ansible/90_aiops-logins.yaml",
 "scm_branch": "",
 "forks": 0,
 "limit": "",
