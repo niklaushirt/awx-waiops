@@ -8,24 +8,32 @@ echo "   \____/_/      /_/  |__/|__/_/  |_/___/\____/ .___/____/  "
 echo "                                             /_/            "
 echo ""
 echo "*****************************************************************************************************************************"
-echo " 🐥 CloudPak for Watson AIOPs - Install and configure AWX in local cluster"
+echo " 🐥 CloudPak for Watson AIOPs - Tool Container"
 echo "*****************************************************************************************************************************"
 echo "  "
 echo ""
 echo ""
 
-export INSTALL_REPO=https://github.com/niklaushirt/awx-waiops.git
 
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🌏  Get Installer files from $INSTALL_REPO"
-git clone $INSTALL_REPO
+git clone $INSTALL_REPO| sed 's/^/      /'
 cd awx-waiops
-ls -al
-
 
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Install AWX"
-ansible-playbook ./ansible/23_install-awx.yaml
+echo "   🔎  Available Playbooks"
+ls -al ansible| sed 's/^/         /'
+
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🔎  Available Tools"
+ls -al tools| sed 's/^/         /'
 
 
-while true; do echo "Still alive"; sleep 3000;  done;
+echo "*****************************************************************************************************************************"
+echo " ✅ DONE"
+echo "*****************************************************************************************************************************"
+
+while true
+do
+    sleep 60000                           
+done

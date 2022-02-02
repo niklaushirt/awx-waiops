@@ -29,7 +29,7 @@
     - role: 00_pre
 
 # Run Roles 
-  #  - role: 18_aiops-toolbox
+    - role: 17_aiops-toolbox
 
       
 

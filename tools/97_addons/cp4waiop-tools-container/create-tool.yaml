@@ -16,9 +16,9 @@ spec:
         app: cp4waiops-tools
     spec:
       containers:
-      - image: niklaushirt/cp4waiops-tools:0.4
+      - image: niklaushirt/cp4waiops-tools:1.0
         imagePullPolicy: IfNotPresent
-        name: bastion
+        name: tools
         command:
         ports:
         - containerPort: 22
@@ -30,20 +30,6 @@ spec:
             cpu: "250m"
             memory: "250Mi"
         env:
-          - name: PORT
-            value : "22"
-          - name: SSH_KEY
-            value : "YOUR SSH PUBLIC KEY"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cp4waiops-tools-service
-  namespace: default
-spec:
-  selector:
-    app: cp4waiops-tools
-  ports:
-    - protocol: TCP
-      port: 22
-      targetPort: 22
+          - name: INSTALL_REPO
+            value : "https://github.com/niklaushirt/awx-waiops.git"
+

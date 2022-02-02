@@ -25,14 +25,18 @@ echo ""
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🛠️  Initialisation"
+
 export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
 export ADMIN_USER=admin
 export ADMIN_PASSWORD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
+
 export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30553
 export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
-export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.1
+export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.2
+
+
 echo "       ✅  Done"
 
 
@@ -305,7 +309,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/17_aiops-demo-ui.yaml",
+    "playbook": "ansible/18_aiops-demo-ui.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -327,12 +331,12 @@ echo "   🚀  Create Job: Install CP4WAIOPS Toolbox"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "17_Install CP4WAIOPS Toolbox",
+    "name": "18_Install CP4WAIOPS Toolbox",
     "description": "Install CP4WAIOPS Toolbox",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/18_aiops-toolbox.yaml",
+    "playbook": "ansible/17_aiops-toolbox.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
