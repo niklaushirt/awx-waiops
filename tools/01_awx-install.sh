@@ -10,12 +10,12 @@ oc create clusterrolebinding awx-default --clusterrole=cluster-admin --serviceac
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Operator"
-oc apply -f ./templates/awx/operator-install.yaml| sed 's/^/      /'
+oc apply -f ./ansible/templates/awx/operator-install.yaml| sed 's/^/      /'
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Instance"
-oc apply -f ./templates/awx/awx-deploy-cr.yml| sed 's/^/      /'
+oc apply -f ./ansible/templates/awx/awx-deploy-cr.yml| sed 's/^/      /'
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"

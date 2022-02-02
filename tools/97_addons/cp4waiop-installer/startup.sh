@@ -14,16 +14,29 @@ echo "  "
 echo ""
 echo ""
 
-export INSTALL_REPO=https://github.com/niklaushirt/awx-waiops.git
+#export INSTALL_REPO=https://github.com/niklaushirt/awx-waiops.git
 
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🌏  Get Installer files from $INSTALL_REPO"
 git clone $INSTALL_REPO| sed 's/^/      /'
-cd awx-waiops| sed 's/^/      /'
-ls -al| sed 's/^/      /'
+
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🌏  Get Installer files from $INSTALL_REPO"
+cd awx-waiops/
+pwd
+
+
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🔎  Available Playbooks"
+ls -al ansible
+
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🔎  Available Tools"
+ls -al tools
 
 
 ./tools/01_awx-install.sh
+./tools/02_awx-init.sh
 
 
 echo "*****************************************************************************************************************************"
@@ -31,4 +44,4 @@ echo " ✅ DONE"
 echo "*****************************************************************************************************************************"
 
 
-while true; do echo "Still alive"; sleep 3000;  done;
+#while true; do echo "Still alive"; sleep 3000;  done;
