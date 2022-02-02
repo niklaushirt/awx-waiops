@@ -1,5 +1,5 @@
 echo "*****************************************************************************************************************************"
-echo " 🐥 CloudPak for Watson AIOPs - Configure AWX"
+echo " 🐥 CloudPak for Watson AIOPs - Install AWX"
 echo "*****************************************************************************************************************************"
 echo "  "
 echo ""
@@ -20,7 +20,7 @@ export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
 export ADMIN_USER=admin
 export ADMIN_PASSWORD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
 export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30840
-export OCP_TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCIxxxxxTEUifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlbW8tYWRtaW4tdG9rZW4tZ2p2NnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVtby1hZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjJiYTYzN2JiLTQxM2ItNGIxNi04NmViLTdhMGRiMDAzNzIzZCIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlbW8tYWRtaW4ifQ.ZV52WPPkM9LKYAD2_2bHTTtkVqKoxmlceAIp-gM3HJ5SICUdm2xgNQHECSdext6kqyPgJq11iWPAt6vz1c5IUW-NgcLnu1pvYP_lpSNeFR8n2HKYVhnU4ddqzkmWojPjgVJbIYQ_2tJEsm8Ke5tKe_ydjx1Up5nn0Zq5-s_C94bjiNlvISgYgE89iATmkqN5v6Bf8aISMZUeoM0SEOVllbbSImcRzWbB6j9MCy2U6SI0cET7ye6nArU0DzIIADUczYzAHmkuXtVjgMX_6wtbBYRfTiZTYTA8suN97dhBfR-I7JkZYrbzhwQOWqr3eqCvmF2tbCKoWihJuQVryTuPrw
+export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
 export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.1
@@ -76,7 +76,7 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_U
     "project": '$PROJECT_ID',
     "kind": "",
     "host_filter": null,
-    "variables": "---\nOCP_LOGIN: true\nOCP_URL: '$OCP_URL'\nOCP_TOKEN: '$OCP_TOKEN'\n#ENTITLED_REGISTRY_KEY: changeme"
+    "variables": "---\nOCP_LOGIN: false\nOCP_URL: '$OCP_URL'\nOCP_TOKEN: '$OCP_TOKEN'\n#ENTITLED_REGISTRY_KEY: changeme"
 }
 ')
 
