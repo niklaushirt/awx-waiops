@@ -17,7 +17,7 @@
 - name: DEMO -               🚀 Install RobotShop
   block:
   - name: DEMO -               🚀 Create robot-shop namespace
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       api_version: v1
       kind: Namespace
       name: "robot-shop"
@@ -36,14 +36,14 @@
               
 
   - name: DEMO -               🚀 Create robot-shop application
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: robot-shop
       src: ./templates/demo_apps/robotshop/robot-all-in-one.yaml
     #when: INSTALL_DEMO_APPS == true
 
   - name: DEMO -               🚀 Create robot-shop load generation
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: robot-shop
       src: ./templates/demo_apps/robotshop/load-deployment.yaml
@@ -64,7 +64,7 @@
 - name: DEMO -               🚀 Install Kubetoy
   block:
   - name: DEMO -               🚀 Create kubetoy namespace
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       api_version: v1
       kind: Namespace
       name: "kubetoy"
@@ -73,7 +73,7 @@
             
 
   - name: DEMO -               🚀 Create kubetoy application
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: kubetoy
       src: ./templates/demo_apps/kubetoy/kubetoy_all_in_one.yaml

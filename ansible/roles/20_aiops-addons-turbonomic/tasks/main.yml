@@ -9,7 +9,7 @@
 # Install Turbonomic
 # --------------------------------------------------------------------------------------------------------------------------------------
 - name: TURBONOMIC -         🚀 Create Turbonomic namespace
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     api_version: v1
     kind: Namespace
     name: "turbonomic"
@@ -26,7 +26,7 @@
         
 
 - name: TURBONOMIC -         🚀 Create Turbonomic service account
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/turbonomic/service_account.yaml
@@ -34,7 +34,7 @@
 
 
 - name: TURBONOMIC -         🚀 Create Turbonomic roles
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/turbonomic/role.yaml
@@ -43,7 +43,7 @@
 
 
 - name: TURBONOMIC -         🚀 Create Turbonomic role-bindings
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/turbonomic/role_binding.yaml
@@ -52,7 +52,7 @@
 
 
 - name: TURBONOMIC -         🚀 Create Turbonomic CRD
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/turbonomic/crds/charts_v1alpha1_xl_crd.yaml
@@ -61,7 +61,7 @@
 
 
 - name: TURBONOMIC -         🚀 Create Turbonomic Operator
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/turbonomic/operator.yaml
@@ -70,7 +70,7 @@
 
 
 - name: TURBONOMIC -         🚀 Create Turbonomic instance
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     template: ./templates/turbonomic/my-turbo-instance.j2

@@ -92,6 +92,6 @@
 
 
 - name: EVENTS-WEBHOOK -      🚀 Create CP4WAIOPS Generic Event Webhook  
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     template: ./templates/waiops-webhook/create-cp4waiops-event-gateway.j2

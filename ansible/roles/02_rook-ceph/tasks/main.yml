@@ -18,7 +18,7 @@
   block:
 
   - name: ROOKCEPH -           🚀 Rook-Ceph CRDS
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/crds.yaml
@@ -27,7 +27,7 @@
 
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Common
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/common.yaml
@@ -36,7 +36,7 @@
 
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Operator
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/operator-openshift.yaml
@@ -45,7 +45,7 @@
 
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Cluster
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/cluster.yaml
@@ -54,7 +54,7 @@
 
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Filesystem
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/filesystem.yaml
@@ -63,7 +63,7 @@
 
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Storageclass File
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/storageclass-fs.yaml
@@ -71,7 +71,7 @@
     
 
   - name: ROOKCEPH -           🚀 Rook-Ceph Storageclass Block
-    community.kubernetes.k8s:
+    kubernetes.core.k8s:
       state: present
       namespace: rook-ceph
       src: ./templates/rook-ceph/storageclass-block.yaml

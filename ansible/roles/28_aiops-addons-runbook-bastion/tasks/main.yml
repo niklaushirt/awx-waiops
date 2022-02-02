@@ -16,7 +16,7 @@
 # Install Runbook Bastion Server
 # --------------------------------------------------------------------------------------------------------------------------------------
 - name: BASTION -            🚀 Install Runbook Bastion Server
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     namespace: "default"
     template: ./templates/runbook_bastion/create-bastion.yaml
