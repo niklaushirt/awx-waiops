@@ -662,6 +662,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 if [[ $result =~ " already exists" ]];
 then
     echo "        Already exists."
+    echo $result
 else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
