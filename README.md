@@ -31,6 +31,24 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 Please create the following two elements in your OCP cluster.
 
 
+## Connamd Line install
+
+You can run run:
+
+```bash
+oc apply -n default -f create-installer.yaml
+
+or
+
+kubectl apply -n default -f create-installer.yaml
+
+```
+
+
+## Web UI install
+
+Or you can create them through the OCP Web UI:
+
 ```yaml
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -84,6 +102,7 @@ spec:
 ```
 
 
+
 You can find the AWX login information in the Pod Logs.
 
 Or run:
@@ -96,5 +115,5 @@ Or run:
 # Tool Pod Access
 
 ```bash
-oc exec pod $(oc get po -n cp4waiops|grep cp4waiops-tools|awk '{print$1}') -n cp4waiops -- /bin/bash
+oc exec -it $(oc get po -n default|grep cp4waiops-tools|awk '{print$1}') -n default -- /bin/bash
 ```
