@@ -251,8 +251,8 @@ echo "   🚀  Create Job: Install LDAP"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "115_Install LDAP",
-    "description": "Install LDAP and register users",
+    "name": "optional_15_Install LDAP",
+    "description": "Install LDAP and register users. This is usually already done by the AI Manager Installation.",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -279,8 +279,8 @@ echo "   🚀  Create Job: Install RobotShop"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "116_Install RobotShop",
-    "description": "Install RobotShop",
+    "name": "optional__16_Install RobotShop",
+    "description": "Install RobotShop. This is usually already done by the AI Manager Installation.",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
