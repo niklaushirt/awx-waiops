@@ -11,7 +11,7 @@
 
 
 
-- name: DEMO-UI -      🚀 Create CP4WAIOPS TOOLBOX
+- name: TOOLBOX -      🚀 DEPLOY TOOLBOX POD
   kubernetes.core.k8s:
     state: present
     template: ./templates/waiops-toolbox/create-waiops-toolbox.yaml

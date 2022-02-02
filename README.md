@@ -92,3 +92,9 @@ Or run:
 ./tools/20_get_logins.sh
 ```
 
+
+# Tool Pod Access
+
+```bash
+oc exec pod $(oc get po -n cp4waiops|grep cp4waiops-tools|awk '{print$1}') -n cp4waiops -- /bin/bash
+```
