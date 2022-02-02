@@ -24,19 +24,12 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 
 
 ---------------------------------------------------------------
-# 🐥 2. Easy Install
+# 🐥 Easy Install
 ---------------------------------------------------------------
 
 
 Please create the following two elements in your OCP cluster.
 
-You can find the AWX login information in the Pod Logs.
-
-Or run:
-
-```bash
-./tools/20_get_logins.sh
-```
 
 ```yaml
 kind: ClusterRoleBinding
@@ -89,3 +82,13 @@ spec:
           - name: INSTALL_REPO
             value : "https://github.com/niklaushirt/awx-waiops.git"
 ```
+
+
+You can find the AWX login information in the Pod Logs.
+
+Or run:
+
+```bash
+./tools/20_get_logins.sh
+```
+
