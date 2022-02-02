@@ -1,0 +1,24 @@
+FROM ubuntu:21.10
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+  ansible \
+  jq \
+  curl \
+  git \
+  wget \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install Openshift Client
+RUN wget https://github.com/openshift/okd/releases/download/4.9.0-0.okd-2022-01-14-230113/openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz && tar xfvz openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz && mv oc /usr/local/bin && mv kubectl /usr/local/bin/ && rm openshift-client-linux-4.9.0-0.okd-2022-01-14-230113.tar.gz
+
+
+# Install stuffv
+RUN ansible-galaxy collection install community.kubernetes:1.2.1
+
+
+COPY startup.sh /root/startup.sh
+RUN chmod +x /root/startup.sh
+
+ENTRYPOINT /root/startup.sh

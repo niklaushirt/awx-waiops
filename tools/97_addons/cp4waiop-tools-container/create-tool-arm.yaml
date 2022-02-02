@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cp4waiops-tools
+  namespace: default
+  labels:
+      app: cp4waiops-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cp4waiops-tools
+  template:
+    metadata:
+      labels:
+        app: cp4waiops-tools
+    spec:
+      containers:
+      - image: niklaushirt/cp4waiops-tools:arm
+        imagePullPolicy: IfNotPresent
+        name: bastion
+        command:
+        ports:
+        - containerPort: 22
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "50Mi"
+          limits:
+            cpu: "250m"
+            memory: "250Mi"
+        env:
+          - name: PORT
+            value : "22"
+          - name: SSH_KEY
+            value : "YOUR SSH PUBLIC KEY"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cp4waiops-tools-service
+  namespace: default
+spec:
+  selector:
+    app: cp4waiops-tools
+  ports:
+    - protocol: TCP
+      port: 22
+      targetPort: 22
