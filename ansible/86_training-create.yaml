@@ -28,8 +28,10 @@
 
 
 # Run Roles 
+    - role: 87_training-create-tg
+    - role: 87_training-create-snow
     - role: 87_training-create-lad
-    
+
 
 
 

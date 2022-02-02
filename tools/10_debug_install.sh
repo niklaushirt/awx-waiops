@@ -98,7 +98,7 @@ function check_array(){
 
 export WAIOPS_NAMESPACE=$(oc get po -A|grep aimanager-operator |awk '{print$1}')
 
-EVTMGR_PARAMETER=$(cat ./00_config_cp4waiops.yaml|grep EVTMGR_NAMESPACE:)
+EVTMGR_PARAMETER=$(cat ./ansible/00_config_cp4waiops.yaml|grep EVTMGR_NAMESPACE:)
 EVTMGR_NAMESPACE=${EVTMGR_PARAMETER##*:}
 EVTMGR_NAMESPACE=$(echo $EVTMGR_NAMESPACE|tr -d '[:space:]')
 

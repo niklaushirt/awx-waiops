@@ -28,8 +28,7 @@
 
 
 # Run Roles 
-    - role: 87_training-create-lad
-    
+    - role: 86_training-load-snow
 
 
 

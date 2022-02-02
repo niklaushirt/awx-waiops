@@ -1,0 +1,62 @@
+
+
+- name: TRAINING -        🚀 LOAD DATA
+  shell: |
+    set -x
+    
+    export APP_NAME=robot-shop
+    export INDEX_TYPE=logs
+
+    export WAIOPS_NAMESPACE=$(oc get po -A|grep aimanager-operator |awk '{print$1}')
+
+
+    unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs>/dev/null 2>&1
+ 
+
+    echo "     ------------------------------------------------------------------------------------------------------------------------------"
+    echo "       🔐  Getting credentials"	
+    echo "     ------------------------------------------------------------------------------------------------------------------------------"
+    oc project $WAIOPS_NAMESPACE > /dev/null 2>&1	
+
+    export username=$(oc get secret $(oc get secrets | grep ibm-aiops-elastic-secret | awk '!/-min/' | awk '{print $1;}') -o jsonpath="{.data.username}"| base64 --decode)	
+    export password=$(oc get secret $(oc get secrets | grep ibm-aiops-elastic-secret | awk '!/-min/' | awk '{print $1;}') -o jsonpath="{.data.password}"| base64 --decode)	
+
+    export WORKING_DIR_ES="./tools/02_training/TRAINING_FILES/ELASTIC/$APP_NAME/$INDEX_TYPE"	
+
+
+    echo "       "	
+    echo "           🧰 Index Type:                $INDEX_TYPE"	
+    echo "       "	
+    echo "           🙎‍♂️ User:                      $username"	
+    echo "           🔐 Password:                  $password"	
+    echo "       "	
+
+    echo "     ------------------------------------------------------------------------------------------------------------------------------"
+    echo "       🗄️  Indexes to be loaded from $WORKING_DIR_ES"	
+    echo "     ------------------------------------------------------------------------------------------------------------------------------"
+    ls -1 $WORKING_DIR_ES | grep "json"	 | sed 's/^/          /'
+    echo "       "	
+    echo "       "	
+
+    export NODE_TLS_REJECT_UNAUTHORIZED=0
+
+    for actFile in $(ls -1 $WORKING_DIR_ES | grep "json");
+    do
+      echo "     "
+      echo "     ------------------------------------------------------------------------------------------------------------------------------"
+      echo "       🛠️  Uploading Index: ${actFile%".json"}"
+      echo "     ------------------------------------------------------------------------------------------------------------------------------"
+
+      elasticdump --input="$WORKING_DIR_ES/${actFile}" --output=https://$username:$password@localhost:9200/${actFile%".json"} --type=data --limit=1000;
+      echo "        ✅  OK"
+    done
+
+
+
+  register: output_string
+  ignore_errors: yes
+- name: LOGIN -          🔐 WAIOPS
+  debug: 
+    var: output_string.stdout_lines
+  #when: PRINT_LOGINS == true
+

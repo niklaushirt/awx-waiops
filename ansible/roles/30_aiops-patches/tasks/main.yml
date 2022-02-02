@@ -136,29 +136,29 @@
   ignore_errors: yes
 
 
-# # --------------------------------------------------------------------------------------------------------------------------------------
-# # Wait for IR Analytics Pods
-# # --------------------------------------------------------------------------------------------------------------------------------------
-# - name: CONFIG -             🕦 Wait for IR Analytics Pods to become available - this can take up to 45 minutes (hack for 3.2)
-#   shell: oc get po -n {{ WAIOPS_NAMESPACE }} | grep aiops-ir-analytics-probablecause| grep -c ""
-#   register: kubectl_get_pods
-#   until: kubectl_get_pods.stdout == "1"
-#   retries: 500
-#   delay: 15
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Wait for IR Analytics Pods
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: CONFIG -             🕦 Wait for IR Analytics Pods to become available - this can take up to 45 minutes (hack for 3.2)
+  shell: oc get po -n {{ WAIOPS_NAMESPACE }} | grep aiops-ir-analytics-probablecause| grep -c ""
+  register: kubectl_get_pods
+  until: kubectl_get_pods.stdout == "1"
+  retries: 500
+  delay: 15
 
 
-# # --------------------------------------------------------------------------------------------------------------------------------------
-# # Patch IR Analytics Pods
-# # --------------------------------------------------------------------------------------------------------------------------------------
-# - name: CONFIG -             🩹 Patch IR Analytics Pods (hack for 3.2)
-#   shell: |
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-topology-service-account -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-worker -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-pipeline-composer -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-master -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-probablecause -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-classifier -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-lifecycle-eventprocessor-ep -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
-#     oc delete pod $(oc get po -n {{ WAIOPS_NAMESPACE }}|grep ImagePull|awk '{print$1}') -n {{ WAIOPS_NAMESPACE }}
-#   ignore_errors: yes
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Patch IR Analytics Pods
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: CONFIG -             🩹 Patch IR Analytics Pods (hack for 3.2)
+  shell: |
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-topology-service-account -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-worker -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-pipeline-composer -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-spark-master -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-probablecause -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-analytics-classifier -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc patch -n {{ WAIOPS_NAMESPACE }} serviceaccount aiops-ir-lifecycle-eventprocessor-ep -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+    oc delete pod $(oc get po -n {{ WAIOPS_NAMESPACE }}|grep ImagePull|awk '{print$1}') -n {{ WAIOPS_NAMESPACE }}
+  ignore_errors: yes
 

@@ -18,7 +18,7 @@ fi
 echo "     "	
 echo "      📥 Launch Query for file: $FILE_NAME"	
 echo "     "
-QUERY="$(cat ./tools/02_training/training-definitions/$FILE_NAME)"
+QUERY="$(cat ../tools/02_training/training-definitions/$FILE_NAME)"
 JSON_QUERY=$(echo "${QUERY}" | jq -sR '{"operationName": null, "variables": {}, "query": .}')
 export result=$(curl -XPOST "https://$ROUTE/graphql" -s -k -H 'Content-Type: application/json' -d "${JSON_QUERY}")
 echo "      🔎 Result: "

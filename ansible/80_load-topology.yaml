@@ -28,7 +28,8 @@
 
 
 # Run Roles 
-    - role: 87_training-create-lad
+    - role: 80_load-topology-merge
+    - role: 81_load-topology-data
     
 
 

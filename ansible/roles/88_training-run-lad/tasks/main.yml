@@ -1,0 +1,21 @@
+
+
+- name: TRAINING -        🚀 RUN LAD
+  shell: |
+    set -x
+    
+
+    echo "  ***************************************************************************************************************************************************"
+    echo "   🛠️  Run Analysis: Log Anomaly Detection"
+    export FILE_NAME=run-analysis-LAD.graphql
+    ../tools/02_training/scripts/execute-graphql.sh
+
+
+
+  register: output_string
+  ignore_errors: yes
+- name: LOGIN -          🔐 WAIOPS
+  debug: 
+    var: output_string.stdout_lines
+  #when: PRINT_LOGINS == true
+
