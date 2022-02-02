@@ -15,7 +15,7 @@
   shell: |
     oc get nodes
     oc get routes -n openshift-console console -o jsonpath={.spec.host}
-    echo "test""
+    echo "test"
   register: zen_ready
 
 
