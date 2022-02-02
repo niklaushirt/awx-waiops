@@ -28,7 +28,7 @@ echo "   🛠️  Initialisation"
 export AWX_ROUTE=$(oc get route -n awx awx -o jsonpath={.spec.host})
 export ADMIN_USER=admin
 export ADMIN_PASSWORD=$(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)
-export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30840
+export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30553
 export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
