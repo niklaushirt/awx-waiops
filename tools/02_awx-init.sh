@@ -631,6 +631,36 @@ else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Debug Patch"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "91_Debug Patch",
+    "description": "Debug Patch",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/91_aiops-debug-patches.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exits."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+
 echo "    "
 echo "    "
 echo "    "
