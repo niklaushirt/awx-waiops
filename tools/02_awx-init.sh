@@ -1,10 +1,9 @@
 #!/bin/bash
 echo "*****************************************************************************************************************************"
-echo " 🐥 CloudPak for Watson AIOPs - Install AWX"
+echo " 🐥 CloudPak for Watson AIOPs - Configure AWX"
 echo "*****************************************************************************************************************************"
 echo "  "
-echo ""
-echo ""
+
 
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Check if AWX is ready"
@@ -134,7 +133,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 -H 'content-type: application/json' \
 -d $'{
     "name": "10_Install CP4WAIOPS AI Manager with Demo content",
-    "description": "Install CP4WAIOPS AI Manager with Demo content",
+    "description": "Install CP4WAIOPS AI Manager with Demo content (LDAP, RobotShop)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -158,7 +157,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Event Manager"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "Install CP4WAIOPS AI Event Manager",
+    "name": "11_Install CP4WAIOPS AI Event Manager",
     "description": "11_Install CP4WAIOPS AI Event Manager",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -183,7 +182,7 @@ echo "   🚀  Create Job: Get CP4WAIOPS Logins"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "Get CP4WAIOPS Logins",
+    "name": "99_Get CP4WAIOPS Logins",
     "description": "90_Get CP4WAIOPS Logins",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -488,16 +487,41 @@ else
 fi 
 
 
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀 AWX Content"
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    "
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀 AWX Projects"
+curl -X "GET" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"
+echo "    "
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀 AWX Inventories"
+curl -X "GET" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"
+echo "    "
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀 AWX Execution Environments"
+curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"
+echo "    "
+echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀 AWX Job Templates"
+curl -X "GET" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq ".results[].name"
+echo "    "
+echo "    "
+echo "    "
+
 
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀 AWX "
+echo "    🚀 AWX Access"
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
 echo "    "
 echo "            📥 AWX :"
 echo ""
-echo "                🌏 URL:      $AWX_URL"
+echo "                🌏 URL:      https://$AWX_ROUTE"
 echo "                🧑 User:     admin"
 echo "                🔐 Password: $(oc -n awx get secret awx-admin-password -o jsonpath='{.data.password}' | base64 --decode && echo)"
 echo "    "
@@ -505,12 +529,10 @@ echo "    "
 
 
 echo "*****************************************************************************************************************************"
-echo " ✅ DONE"
-echo "*****************************************************************************************************************************"
 
 while true
 do
-	printf "    ✅ DONE"
+	printf "\r    ✅ DONE"
     sleep 15                              
 done
 
