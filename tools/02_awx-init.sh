@@ -34,11 +34,14 @@ echo "        🌏 AWX_ROUTE:$AWX_ROUTE"
 echo ""
 
 
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure -H 'content-type: application/json' -d $'{"name": "CP4WAIOPS Project","description": "CP4WAIOPS Project","local_path": "","scm_type": "git","scm_url": "'$AWX_REPO'","scm_branch": "","scm_refspec": "","scm_clean": false,"scm_track_submodules": false,"scm_delete_on_update": false,"credential": null,"timeout": 0,"organization": 1,"scm_update_on_launch": false,"scm_update_cache_timeout": 0,"allow_override": false,"default_environment": null}')
+echo $result
+
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Project"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "CP4WAIOPS Project",
@@ -60,14 +63,20 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER
     "default_environment": null
 }')
 
-echo "      Project created: "$(echo $result|jq ".created")
-export PROJECT_ID=$(echo $result|jq ".id")
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Project created: "$(echo $result|jq ".created")
+    export PROJECT_ID=$(echo $result|jq ".id")
+fi
+
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Inventory"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "CP4WAIOPS Install",
@@ -80,16 +89,20 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/inventories/" -u "$ADMIN_U
 }
 ')
 
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
 echo "      Inventory created: "$(echo $result|tr -d '\n'|jq ".created")
 export INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
-
+fi
 
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Executon Environment"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "CP4WAIOPS Execution Environment",
@@ -100,8 +113,13 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -
     "pull": "missing"
 }')
 
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
 echo "      Executon Environment created: "$(echo $result|jq ".created")
 export EXENV_ID=$(echo $result|jq ".id")
+fi 
 
 sleep 15
 
@@ -109,7 +127,7 @@ sleep 15
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install CP4WAIOPS AI Manager with Demo content"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "10_Install CP4WAIOPS AI Manager with Demo content",
@@ -124,13 +142,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install CP4WAIOPS AI Event Manager"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Install CP4WAIOPS AI Event Manager",
@@ -145,13 +167,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Get CP4WAIOPS Logins"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "Get CP4WAIOPS Logins",
@@ -166,13 +192,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install Rook Ceph"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "14_Install Rook Ceph",
@@ -187,8 +217,12 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 
@@ -196,7 +230,7 @@ echo "      Job created: "$(echo $result|jq ".created")
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install LDAP"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "15_Install LDAP",
@@ -211,8 +245,12 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 
@@ -220,7 +258,7 @@ echo "      Job created: "$(echo $result|jq ".created")
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install RobotShop"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "16_Install RobotShop",
@@ -235,13 +273,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install CP4WAIOPS Demo UI"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "17_Install CP4WAIOPS Demo UI",
@@ -256,14 +298,18 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install Toolbox"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "18_Install CP4WAIOPS Toolbox",
@@ -278,13 +324,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install Turbonomic"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "20_Install Turbonomic",
@@ -299,14 +349,18 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install Humio"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "21_Install Humio",
@@ -321,14 +375,18 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install ELK"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "22_Install ELK",
@@ -343,13 +401,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install AWX"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "22_Install AWX",
@@ -364,13 +426,17 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install ManageIQ"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "24_Install ManageIQ",
@@ -385,14 +451,18 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Install ServiceMesh"
-result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
     "name": "29_Install ServiceMesh",
@@ -407,8 +477,12 @@ result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN
 }
 ')
 
-echo "      Job created: "$(echo $result|jq ".created")
-
+if [[ $result =~ " already exists" ]];
+then
+    echo "      Already exits."
+else
+    echo "      Job created: "$(echo $result|jq ".created")
+fi 
 
 
 
