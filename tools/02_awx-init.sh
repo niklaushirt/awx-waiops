@@ -545,7 +545,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/86_training-load-log.yaml",
+    "playbook": "ansible/86_training-load-logs.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
@@ -571,7 +571,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/87_training-run-log.yaml",
+    "playbook": "ansible/87_training-run-logs.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
