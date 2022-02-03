@@ -52,7 +52,7 @@ echo "   -----------------------------------------------------------------------
 echo "   📦 Uncompressing log anomaly training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 
-unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs>/dev/null 2>&1
+unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs #>/dev/null 2>&1
 # else
 #     echo "❌ Skipped"
 # fi
