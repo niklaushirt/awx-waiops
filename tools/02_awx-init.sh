@@ -51,6 +51,30 @@ echo ""
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create AWX Executon Environment"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "CP4WAIOPS Execution Environment",
+    "description": "CP4WAIOPS Execution Environment",
+    "organization": null,
+    "image": "'$RUNNER_IMAGE'",
+    "credential": null,
+    "pull": "missing"
+}')
+
+if [[ $result =~ " already exists" ]];
+then
+    export EXENV_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Execution Environment")|.id')
+    echo "        Already exists with ID:$EXENV_ID"
+else
+    echo "        Executon Environment created: "$(echo $result|jq ".created")
+    export EXENV_ID=$(echo $result|jq ".id")
+fi 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create AWX Project"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/projects/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
@@ -108,36 +132,12 @@ then
 else
     echo "        Inventory created: "$(echo $result|tr -d '\n'|jq ".created")
     export INVENTORY_ID=$(echo $result|tr -d '\n'|jq ".id")
-fi
-
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create AWX Executon Environment"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "CP4WAIOPS Execution Environment",
-    "description": "CP4WAIOPS Execution Environment",
-    "organization": null,
-    "image": "'$RUNNER_IMAGE'",
-    "credential": null,
-    "pull": "missing"
-}')
-
-if [[ $result =~ " already exists" ]];
-then
-    export EXENV_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Execution Environment")|.id')
-    echo "        Already exists with ID:$EXENV_ID"
-else
-    echo "        Executon Environment created: "$(echo $result|jq ".created")
-    export EXENV_ID=$(echo $result|jq ".id")
     echo ""
     echo "   ------------------------------------------------------------------------------------------------------------------------------"
     echo "   🕦  Waiting 15s"
     sleep 15
-fi 
+fi
+
 
 
 
@@ -503,6 +503,34 @@ then
 else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Load Topology"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "80_Load Topology",
+    "description": "Load Topology",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/80_load-topology.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
 
 
 
