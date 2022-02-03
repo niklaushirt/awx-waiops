@@ -48,6 +48,39 @@ export WORKING_DIR_ES="./tools/02_training/TRAINING_FILES/ELASTIC/$APP_NAME/$IND
 
 echo "           ✅ Credentials:               OK"	
 
+echo "     ------------------------------------------------------------------------------------------------------------------------------"
+echo "       🔐  Elasticsearch credentials"	
+echo "     ------------------------------------------------------------------------------------------------------------------------------"
+
+if [[ $username == "" ]] ;	
+then	
+      echo "     ❌ Could not get Elasticsearch Username. Aborting..."	
+      exit 1	
+fi	
+
+if [[ $password == "" ]] ;	
+then	
+      echo "     ❌ Could not get Elasticsearch Password. Aborting..."	
+      exit 1	
+fi	
+
+
+echo ""	
+echo "           📥 App Name:                     $APP_NAME"
+echo "           🧰 Index Type:                   $INDEX_TYPE"	
+echo ""	
+echo "           🙎‍♂️ User:                         $username"	
+echo "           🔐 Password:                     $password"	
+echo ""	
+echo "          ❗ Overwrite existing indexes:    $INDEX_OVERWRITE"
+echo ""	
+echo "          📂 Working Directory:             $WORKING_DIR_ES"
+echo ""
+echo ""
+
+
+ls -Ral ./tools/02_training/TRAINING_FILES| sed 's/^/          /'
+
 
 export ES_FILES=$(ls -1 $WORKING_DIR_ES | grep "json")	
 if [[ $ES_FILES == "" ]] ;	
@@ -66,30 +99,6 @@ echo "     "
 #--------------------------------------------------------------------------------------------------------------------------------------------	
 #  Check Credentials	
 #--------------------------------------------------------------------------------------------------------------------------------------------	
-
-echo "     ------------------------------------------------------------------------------------------------------------------------------"
-echo "       🔐  Elasticsearch credentials"	
-echo "     ------------------------------------------------------------------------------------------------------------------------------"
-
-if [[ $username == "" ]] ;	
-then	
-      echo "     ❌ Could not get Elasticsearch Username. Aborting..."	
-      exit 1	
-fi	
-
-if [[ $password == "" ]] ;	
-then	
-      echo "     ❌ Could not get Elasticsearch Password. Aborting..."	
-      exit 1	
-fi	
-
-
-echo "       "	
-echo "           🧰 Index Type:                $INDEX_TYPE"	
-echo "       "	
-echo "           🙎‍♂️ User:                      $username"	
-echo "           🔐 Password:                  $password"	
-echo "       "	
 
 echo "     ------------------------------------------------------------------------------------------------------------------------------"
 echo "       🗄️  Indexes to be loaded from $WORKING_DIR_ES"	

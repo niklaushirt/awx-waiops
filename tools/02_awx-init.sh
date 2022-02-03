@@ -508,12 +508,12 @@ fi
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Load Topology"
+echo "   🚀  Create Job: Topology Load"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "80_Load Topology",
-    "description": "Load Topology",
+    "name": "80_Topology Load",
+    "description": "Topology Load",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
