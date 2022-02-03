@@ -134,11 +134,11 @@ for actFile in $(ls -1 $WORKING_DIR_ES | grep "json");
 do
       if [[ $existingIndexes =~ "${actFile%".json"}" ]] ;
       then
-            echo "        ⚠️  Index already exist in Cluster."
+            echo "        ❗  Index already exist in Cluster."
             if [ "$INDEX_OVERWRITE" = true ] ; then
                   #curl -k -u $username:$password -XGET https://localhost:9200/_cat/indices | grep ${actFile%".json"} | sort
 
-                  echo "        ⚠️ Overwriting the index due to INDEX_OVERWRITE=true..."
+                  echo "        ❗ Overwriting the index due to INDEX_OVERWRITE=true..."
                   echo "        ✅ Ok, continuing..."
                   echo "     "
                   echo "     "
