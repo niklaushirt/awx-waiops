@@ -79,7 +79,7 @@ echo ""
 echo ""
 
 
-ls -Ral ./tools/02_training/TRAINING_FILES| sed 's/^/          /'
+#ls -Ral ./tools/02_training/TRAINING_FILES| sed 's/^/          /'
 
 
 export ES_FILES=$(ls -1 $WORKING_DIR_ES | grep "json")	
