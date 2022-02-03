@@ -34,7 +34,7 @@ export OCP_URL=https://c108-e.eu-gb.containers.cloud.ibm.com:30553
 export OCP_TOKEN=CHANGE-ME
 
 export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
-export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.2
+export RUNNER_IMAGE=niklaushirt/cp4waiops-awx:0.1.3
 
 
 echo "       ✅  Done"

@@ -31,6 +31,12 @@ if [[  $WAIOPS_NAMESPACE =~ "" ]]; then
     echo "       ✅ OK - AI Manager:               $WAIOPS_NAMESPACE"
 fi
 
+if [ ! -x "$(command -v unzip)" ]; then
+      echo "❌ Unzip not installed."
+
+      echo "❌ Aborting...."
+      exit 1
+fi
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +57,8 @@ git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   📦 Uncompressing log anomaly training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-tar zfx ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -C ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs #>/dev/null 2>&1
+unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs #>/dev/null 2>&1
+
 # else
 #     echo "❌ Skipped"
 # fi
