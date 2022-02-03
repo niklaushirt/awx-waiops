@@ -673,8 +673,8 @@ echo "   🚀  Create Job: Training Run SNOW"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "987_Training Run SNOW (executed by 84_Training All Models)",
-    "description": "Training Run SNOW ",
+    "name": "987_Training Run SNOW",
+    "description": "Training Run SNOW (executed by 84_Training All Models)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
