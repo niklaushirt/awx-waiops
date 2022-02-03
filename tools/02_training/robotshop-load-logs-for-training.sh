@@ -51,8 +51,7 @@ git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   📦 Uncompressing log anomaly training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-
-unzip -o ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -d ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs #>/dev/null 2>&1
+tar zfx ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs/data-log-training.zip -C ./tools/02_training/TRAINING_FILES/ELASTIC/robot-shop/logs #>/dev/null 2>&1
 # else
 #     echo "❌ Skipped"
 # fi
