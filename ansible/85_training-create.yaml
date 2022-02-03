@@ -28,9 +28,9 @@
 
 
 # Run Roles 
-    - role: 87_training-create-tg
-    - role: 87_training-create-snow
-    - role: 87_training-create-lad
+    - role: 86_training-create-tg
+    - role: 86_training-create-snow
+    - role: 86_training-create-logs
 
 
 
