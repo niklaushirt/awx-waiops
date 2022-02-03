@@ -279,7 +279,7 @@ echo "   🚀  Create Job: Install RobotShop"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional__16_Install RobotShop",
+    "name": "optional_16_Install RobotShop",
     "description": "Install RobotShop. This is usually already done by the AI Manager Installation.",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -537,11 +537,37 @@ fi
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Training Complete"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "84_Training All Models",
+    "description": "Training All Models",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/84_training-all.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
 echo "   🚀  Create Job: Training Create"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "85_Training Create",
+    "name": "optional_85_Training Create (executed by 84_Training All Models)",
     "description": "Training Create",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -568,7 +594,7 @@ echo "   🚀  Create Job: Training Load Log"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "86_Training Load Log",
+    "name": "optional_86_Training Load Log (executed by 84_Training All Models)",
     "description": "Training Load Log",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -594,7 +620,7 @@ echo "   🚀  Create Job: Training Run Log"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "87_Training Run Log",
+    "name": "optional_87_Training Run Log (executed by 84_Training All Models)",
     "description": "Training Run Log",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -621,7 +647,7 @@ echo "   🚀  Create Job: Training Load SNOW"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "86_Training Load SNOW",
+    "name": "optional_86_Training Load SNOW (executed by 84_Training All Models)",
     "description": "Training Load SNOW",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -647,8 +673,8 @@ echo "   🚀  Create Job: Training Run SNOW"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "87_Training Run SNOW",
-    "description": "Training Run SNOW",
+    "name": "optional_87_Training Run SNOW (executed by 84_Training All Models)",
+    "description": "Training Run SNOW ",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
