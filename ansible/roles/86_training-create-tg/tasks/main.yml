@@ -1,6 +1,6 @@
 
 
-- name: TRAINING -        🚀 CREATE AND RUN TEMPORAL GROUPING
+- name: TRAINING EVENTS -        🚀 CREATE AND LAUNCH TEMPORAL GROUPING CONFIGURATION
   shell: |
     set -x
     
@@ -20,7 +20,7 @@
 
   register: output_string
   ignore_errors: yes
-- name: LOGIN -          🔐 WAIOPS
+- name: TRAINING EVENTS -       ✅ RESULT
   debug: 
     var: output_string.stdout_lines
   #when: PRINT_LOGINS == true

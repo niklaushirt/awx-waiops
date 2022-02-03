@@ -1,10 +1,9 @@
 
 
-- name: TRAINING -        🚀 CREATE SNOW
+- name: TRAINING SNOW -       🚀 RUN SNOW TRAINING
   shell: |
     set -x
     
-
     echo "  ***************************************************************************************************************************************************"
     echo "   🛠️  Run Analysis: Change Risk"
     export FILE_NAME=run-analysis-CR.graphql
@@ -15,12 +14,9 @@
     export FILE_NAME=run-analysis-SI.graphql
     ../tools/02_training/scripts/execute-graphql.sh
 
-
-
-
   register: output_string
   ignore_errors: yes
-- name: LOGIN -          🔐 WAIOPS
+- name: TRAINING SNOW -       ✅ RESULT
   debug: 
     var: output_string.stdout_lines
   #when: PRINT_LOGINS == true

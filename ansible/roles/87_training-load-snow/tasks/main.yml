@@ -1,12 +1,11 @@
-- name: TRAINING -        🚀 LOAD SNOW INDEXES
+- name: TRAINING SNOW -       🚀 LOAD ELASTICSEARCH SNOW DATA 
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/training/load-job-snow.yaml
   
 
-
-- name: TRAINING -        🚀 Wait for Completion
+- name: TRAINING SNOW -       🕦 WAIT FOR COMPLETION
   shell: |
     while : ; do
           READY=$(oc get jobs -n default load-snow-indexes)
@@ -22,17 +21,17 @@
 
 
 
-- name: TRAINING -        🚀 CLEANUP JOB
+- name: TRAINING SNOW -       🧻 CLEANUP JOB
   kubernetes.core.k8s:
     state: absent
     namespace: turbonomic
     src: ./templates/training/load-job-snow.yaml
   
 
-- name: TRAINING -        🚀 Delete Completed Pods
+
+- name: TRAINING SNOW -       🧻 CLEANUP COMPLETED JOBS
   shell: |
-    oc delete pod  -n default $(oc get po -n default|grep load-snow-indexes|awk '{print$1}')
+    oc delete pod  -n default --ignore-not-found $(oc get po -n default|grep load-snow-indexes|awk '{print$1}')
   register: ES_READY
-
-
+  ignore_errors: yes
 
