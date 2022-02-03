@@ -29,6 +29,8 @@ if [[  $WAIOPS_NAMESPACE =~ "" ]]; then
     echo "       ✅ OK - AI Manager:    $WAIOPS_NAMESPACE"
 fi
 
+echo ""
+echo "       🔎 Overwrite existing indexes:    $INDEX_OVERWRITE"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -44,9 +46,12 @@ echo "   🌏 Getting training files"
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
 git clone https://github.com/niklaushirt/awx-waiops-trainingdata.git ./tools/02_training/TRAINING_FILES/ELASTIC/
 
-while true; do oc port-forward statefulset/iaf-system-elasticsearch-es-aiops 9200; done &
+while true; do oc port-forward statefulset/iaf-system-elasticsearch-es-aiops 9200; done>/dev/null 2>&1&
 
 echo ""
 ./tools/02_training/scripts/load-es-index.sh
 
+echo "*****************************************************************************************************************************"
+echo " ✅ DONE"
+echo "*****************************************************************************************************************************"
 

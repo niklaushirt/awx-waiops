@@ -29,7 +29,9 @@ spec:
               git clone $AWX_REPO
               cd awx-waiops
               ./tools/02_training/robotshop-load-snow-for-training.sh
-
+          env:
+            - name: INDEX_OVERWRITE
+              value : "false"
       restartPolicy: Never
 
   backoffLimit: 4
@@ -64,7 +66,9 @@ spec:
               git clone $AWX_REPO
               cd awx-waiops
               ./tools/02_training/robotshop-load-logs-for-training.sh
-
+          env:
+            - name: INDEX_OVERWRITE
+              value : "false"
       restartPolicy: Never
 
   backoffLimit: 4
