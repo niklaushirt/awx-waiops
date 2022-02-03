@@ -134,43 +134,29 @@ for actFile in $(ls -1 $WORKING_DIR_ES | grep "json");
 do
       if [[ $existingIndexes =~ "${actFile%".json"}" ]] ;
       then
-            if [ "$SILENT_SKIP" = false ] ; then
+            echo "        ⚠️  Index already exist in Cluster."
+            if [ "$INDEX_OVERWRITE" = true ] ; then
                   #curl -k -u $username:$password -XGET https://localhost:9200/_cat/indices | grep ${actFile%".json"} | sort
-                  echo "       ⚠️  Index already exist in Cluster."
-                  read -p "        ❗❓ Replace or Skip? [r,S] " DO_COMM
-                  if [[ $DO_COMM == "r" ||  $DO_COMM == "R"  ]]; then
-                        read -p "        ❗❓ Are you sure that you want to delete and replace the Index? [y,N] " DO_COMM
-                        if [[ $DO_COMM == "y" ||  $DO_COMM == "Y" ]]; then
-                              echo "        ✅ Ok, continuing..."
-                              echo "     "
-                              echo "     "
-                              echo "     ------------------------------------------------------------------------------------------------------------------------------"
-                              echo "       ❌  Deleting Index: ${actFile%".json"}"
-                              echo "     ------------------------------------------------------------------------------------------------------------------------------"
-                              curl -k -u $username:$password -XDELETE https://$username:$password@localhost:9200/${actFile%".json"}
-                              echo "     "
-                              echo "     "
-                              echo "     "
-                              echo "     ------------------------------------------------------------------------------------------------------------------------------"
-                              echo "       🛠️  Uploading Index: ${actFile%".json"}"
-                              echo "     ------------------------------------------------------------------------------------------------------------------------------"
 
-                              elasticdump --input="$WORKING_DIR_ES/${actFile}" --output=https://$username:$password@localhost:9200/${actFile%".json"} --type=data --limit=1000;
-                              echo "        ✅  OK"
+                  echo "        ⚠️ Overwriting the index due to INDEX_OVERWRITE=true..."
+                  echo "        ✅ Ok, continuing..."
+                  echo "     "
+                  echo "     "
+                  echo "     ------------------------------------------------------------------------------------------------------------------------------"
+                  echo "       ❌  Deleting Index: ${actFile%".json"}"
+                  echo "     ------------------------------------------------------------------------------------------------------------------------------"
+                  curl -k -u $username:$password -XDELETE https://$username:$password@localhost:9200/${actFile%".json"}
+                  echo "     "
+                  echo "     "
+                  echo "     "
+                  echo "     ------------------------------------------------------------------------------------------------------------------------------"
+                  echo "       🛠️  Uploading Index: ${actFile%".json"}"
+                  echo "     ------------------------------------------------------------------------------------------------------------------------------"
 
-
-                        else
-                              echo "        ✅ Ok, skipping..."
-                              echo "    "
-                              return
-                        fi
-                        
-                  else
-                        echo "        ✅ Ok, skipping..."
-                        echo "    "
-                  fi
+                  elasticdump --input="$WORKING_DIR_ES/${actFile}" --output=https://$username:$password@localhost:9200/${actFile%".json"} --type=data --limit=1000;
+                  echo "        ✅  OK"
             else
-                  echo "        ✅ Ok, skipping due to SILENT_SKIP=true..."
+                  echo "        ✅ Ok, skipping due to INDEX_OVERWRITE=false..."
                   echo "    "
             fi
       else 

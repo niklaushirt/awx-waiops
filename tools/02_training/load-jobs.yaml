@@ -63,7 +63,7 @@ spec:
               export AWX_REPO=https://github.com/niklaushirt/awx-waiops.git
               git clone $AWX_REPO
               cd awx-waiops
-              ./tools/02_training/robotshop-load-log-for-training.sh
+              ./tools/02_training/robotshop-load-logs-for-training.sh
 
       restartPolicy: Never
 
