@@ -4,3 +4,25 @@
     namespace: turbonomic
     src: ./templates/training/load-job-logs.yaml
   
+- name: TRAINING -        🚀 Wait for Completion
+  shell: |
+    while : ; do
+          READY=$(oc get jobs -n default load-log-indexes)
+          if [[ ! $READY  =~ "1/1" ]]; then
+                echo "        Load Job not completed. Waiting 30 seconds"
+                sleep 30
+          else
+                break
+          fi
+    done
+    echo "      ✅ OK"
+  register: ES_READY
+
+
+
+- name: TRAINING -        🚀 CLEANUP JOB
+  kubernetes.core.k8s:
+    state: absent
+    namespace: turbonomic
+    src: ./templates/training/load-job-logs.yaml
+  
