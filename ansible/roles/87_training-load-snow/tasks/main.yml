@@ -22,7 +22,7 @@
 
 
 
-- name: TRAINING -        🚀 LOAD SNOW INDEXES
+- name: TRAINING -        🚀 CLEANUP JOB
   kubernetes.core.k8s:
     state: absent
     namespace: turbonomic
