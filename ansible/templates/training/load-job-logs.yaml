@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: load
-          image: niklaushirt/cp4waiops-tools:1.1
+          image: niklaushirt/cp4waiops-tools:1.2
           imagePullPolicy: IfNotPresent
           resources:
             requests:

@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
   jq \
   curl \
   nano \
+  unzip \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Openshift Client
