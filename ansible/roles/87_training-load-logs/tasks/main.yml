@@ -1,10 +1,10 @@
-- name: TRAINING LAD -        🚀 LOAD ELASTICSEARCH LOG DATA 
+- name: TRAINING LOAD LAD -        🚀 LOAD ELASTICSEARCH LOG DATA 
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
     src: ./templates/training/load-job-logs.yaml
 
-- name: TRAINING LAD -        🕦 WAIT FOR COMPLETION
+- name: TRAINING LOAD LAD -        🕦 WAIT FOR COMPLETION
   shell: |
     while : ; do
           READY=$(oc get jobs -n default load-log-indexes)
@@ -20,14 +20,14 @@
 
 
 
-- name: TRAINING LAD -        🧻 CLEANUP JOB
+- name: TRAINING LOAD LAD -        🧻 CLEANUP JOB
   kubernetes.core.k8s:
     state: absent
     namespace: turbonomic
     src: ./templates/training/load-job-logs.yaml
   
 
-- name: TRAINING LAD -        🧻 CLEANUP COMPLETED JOBS
+- name: TRAINING LOAD LAD -        🧻 CLEANUP COMPLETED JOBS
   shell: |
     oc delete pod  -n default --ignore-not-found $(oc get po -n default|grep load-logs-indexes|awk '{print$1}')
   register: ES_READY

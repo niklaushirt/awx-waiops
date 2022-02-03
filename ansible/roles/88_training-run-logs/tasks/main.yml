@@ -1,6 +1,6 @@
 
 
-- name: TRAINING LAD -       🚀 RUN LAD TRAINING
+- name: TRAINING RUN LAD -       🚀 RUN LAD TRAINING
   shell: |
     set -x
     
@@ -11,7 +11,7 @@
 
   register: output_string
   ignore_errors: yes
-- name: TRAINING LAD -       ✅ RESULT
+- name: TRAINING RUN LAD -       ✅ RESULT
   debug: 
     var: output_string.stdout_lines
   #when: PRINT_LOGINS == true

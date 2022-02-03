@@ -1,6 +1,6 @@
 
 
-- name: TRAINING SNOW -        🚀 CREATE SNOW CONFIGURATION
+- name: TRAINING CREATE SNOW -        🚀 CREATE SNOW CONFIGURATION
   shell: |
     set -x
     
@@ -20,7 +20,7 @@
 
   register: output_string
   ignore_errors: yes
-- name: TRAINING SNOW -       ✅ RESULT
+- name: TRAINING CREATE SNOW -       ✅ RESULT
   debug: 
     var: output_string.stdout_lines
   #when: PRINT_LOGINS == true
