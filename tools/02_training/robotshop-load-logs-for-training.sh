@@ -78,7 +78,6 @@ echo ""
 
 
 
-oc delete pod  -n default $(oc get po -n default|grep load-log-indexes|awk '{print$1}')
 
 echo "*****************************************************************************************************************************"
 echo " ✅ DONE"

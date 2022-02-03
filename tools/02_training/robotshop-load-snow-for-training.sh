@@ -49,7 +49,6 @@ echo ""
 ./tools/02_training/scripts/load-es-index.sh
 
 
-oc delete pod  -n default $(oc get po -n default|grep load-snow-indexes|awk '{print$1}')
 
 
 echo "*****************************************************************************************************************************"

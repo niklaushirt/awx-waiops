@@ -26,3 +26,10 @@
     namespace: turbonomic
     src: ./templates/training/load-job-logs.yaml
   
+
+- name: TRAINING -        🚀 Delete Completed Pods
+  shell: |
+    oc delete pod  -n default $(oc get po -n default|grep load-log-indexes|awk '{print$1}')
+  register: ES_READY
+
+
