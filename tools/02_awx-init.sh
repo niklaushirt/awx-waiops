@@ -198,7 +198,7 @@ echo "   🚀  Create Job: Get CP4WAIOPS Logins"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "99_Get CP4WAIOPS Logins",
+    "name": "12_Get CP4WAIOPS Logins",
     "description": "90_Get CP4WAIOPS Logins",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -223,7 +223,7 @@ echo "   🚀  Create Job: Install Rook Ceph"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "14_Install Rook Ceph",
+    "name": "914_Install Rook Ceph",
     "description": "Install Rook Ceph",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -251,7 +251,7 @@ echo "   🚀  Create Job: Install LDAP"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_15_Install LDAP",
+    "name": "915_Install LDAP",
     "description": "Install LDAP and register users. This is usually already done by the AI Manager Installation.",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -279,7 +279,7 @@ echo "   🚀  Create Job: Install RobotShop"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_16_Install RobotShop",
+    "name": "916_Install RobotShop",
     "description": "Install RobotShop. This is usually already done by the AI Manager Installation.",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -542,7 +542,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
 -H 'content-type: application/json' \
 -d $'{
     "name": "84_Training All Models",
-    "description": "Training All Models",
+    "description": "Training All Models, takes about 5-7 Minutes",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -567,8 +567,8 @@ echo "   🚀  Create Job: Training Create"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_85_Training Create (executed by 84_Training All Models)",
-    "description": "Training Create",
+    "name": "985_Training Create",
+    "description": "Training Create (executed by 84_Training All Models)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -594,8 +594,8 @@ echo "   🚀  Create Job: Training Load Log"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_86_Training Load Log (executed by 84_Training All Models)",
-    "description": "Training Load Log",
+    "name": "986_Training Load Log",
+    "description": "Training Load Log (executed by 84_Training All Models)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -620,8 +620,8 @@ echo "   🚀  Create Job: Training Run Log"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_87_Training Run Log (executed by 84_Training All Models)",
-    "description": "Training Run Log",
+    "name": "987_Training Run Log",
+    "description": "Training Run Log (executed by 84_Training All Models)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -647,8 +647,8 @@ echo "   🚀  Create Job: Training Load SNOW"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_86_Training Load SNOW (executed by 84_Training All Models)",
-    "description": "Training Load SNOW",
+    "name": "986_Training Load SNOW",
+    "description": "Training Load SNOW (executed by 84_Training All Models)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -673,7 +673,7 @@ echo "   🚀  Create Job: Training Run SNOW"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "optional_87_Training Run SNOW (executed by 84_Training All Models)",
+    "name": "987_Training Run SNOW (executed by 84_Training All Models)",
     "description": "Training Run SNOW ",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -706,7 +706,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/91_aiops-debug-patches.yaml",
+    "playbook": "ansible/89_aiops-debug-patches.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
