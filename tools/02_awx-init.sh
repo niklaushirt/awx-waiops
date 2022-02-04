@@ -434,7 +434,7 @@ echo "   🚀  Create Job: Install AWX"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "22_Install AWX",
+    "name": "23_Install AWX",
     "description": "Install AWX",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
