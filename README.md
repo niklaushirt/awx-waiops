@@ -1,6 +1,7 @@
 <center> <h1>CP4WatsonAIOps V3.2</h1> </center>
-<center> <h2>Demo Environment Installation with AWX</h2> </center>
+<center> <h2>Demo Environment Installation with Ansible Tower/AWX</h2> </center>
 
+![K8s CNI](./doc/pics/front.png)
 
 
 <center> ©2022 Niklaus Hirt / IBM </center>
@@ -63,6 +64,8 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 # 🚀 1 Easy Install
 ---------------------------------------------------------------
 
+This installation method uses AWX (Open Source Ansible Tower) to install CP4WAIOPS and it's components.
+
 ## 1.1 Platform Install - AWX
 
 
@@ -82,6 +85,7 @@ kubectl apply -n default -f create-installer.yaml
 
 ```
 
+<div style="page-break-after: always;"></div>
 
 ### 1.1.2 Web UI install
 
@@ -101,6 +105,8 @@ subjects:
     name: default
     namespace: default
 ```
+
+<div style="page-break-after: always;"></div>
 
 ```yaml
 apiVersion: apps/v1
@@ -139,6 +145,8 @@ spec:
             value : "https://github.com/niklaushirt/awx-waiops.git"
 ```
 
+<div style="page-break-after: always;"></div>
+
 ---------------------------------------------------------------
 ## 2 Provide Entitlement
 ---------------------------------------------------------------
@@ -166,6 +174,8 @@ This allows the CP4WAIOPS images to be pulled from the IBM Container Registry.
 
 Yop are now ready to lauch the installations.
 
+<div style="page-break-after: always;"></div>
+
 ---------------------------------------------------------------
 ## 3 Installing Components
 ---------------------------------------------------------------
@@ -184,7 +194,6 @@ The following Components can be installed:
 || 18_InstallCP4WAIOPSDemoUI | Demo UI to simulate incidents | 
 || | |  
 | **Third-party** | | |  
-|| 14_InstallRookCeph | |  
 || 20_InstallTurbonomic | | 
 || 21_InstallHumio | | 
 || 22_InstallAWX | | 
@@ -192,19 +201,21 @@ The following Components can be installed:
 || 24_InstallManageIQ | | 
 || 29_InstallServiceMesh | |  
 || | |  
+| **Topology** |  | |  
+|| 80_Topology Load for AI Manager | Load the custom RobotShop Topology into AI Manager ASM | 
+|| 81_Topology Load for Event Manager | Load the custom RobotShop Topology into Event Manager ASM | 
+|| | | 
 | **Training** |  | |  
-|| 85_TrainingCreate | Create all training definitions (LAD, TemporalGrouping, Similar Incidents, Change Risk) | 
-|| 86_TrainingLoadLog | Not working yet, please use `./tools/02_training/robotshop-load-logs-for-training.sh` | 
-|| 86_TrainingLoadSNOW | Not working yet, please use `./tools/02_training/robotshop-load-snow-for-training.sh` | 
-|| 87_TrainingRunLog | Run the LAD Training once the Indexes are loaded | 
-|| 87_TrainingRunSNOW | Run the Similar Incidents and Change Risk Training once the Indexes are loaded | 
+|| 84_Training All Models | Create all training definitions (LAD, TemporalGrouping, Similar Incidents, Change Risk), loads the training data end runs the training | 
 || | | 
 | **Tools** | | |  
+|| 12_Get CP4WAIOPS Logins | Get Logins for all Components | 
 || 91_DebugPatch | Repatch some errors (non destructive) | 
-|| 99_GetCP4WAIOPSLogins | Get Logins for all Components | 
-|| optional\_15_InstallLDAP | Already installed by the AI Manager Install | 
-|| optional\_16_InstallRobotShop | Already installed by the AI Manager Install | 
+|| 14_InstallRookCeph | |  
 
+
+
+<div style="page-break-after: always;"></div>
 
 ## 3.1 Installing AI Manager 
 
@@ -240,7 +251,7 @@ Usually it's a good idea to store this in a file for later use:
 <div style="page-break-after: always;"></div>
 
 
-## 3.1.3 Configure AI Manager 
+### 3.1.3 Configure AI Manager 
 
 There are some minimal configurations that you have to do to use the demo system and that are covered by the following flow:
 
@@ -376,6 +387,7 @@ Just click and follow the 🚀 and execute all the steps.
 2. The Job will start with the installation
 2. Wait until the Job has finished 
 
+<div style="page-break-after: always;"></div>
 
 ## 3.7 Installing AWX 
 
@@ -392,6 +404,8 @@ Just click and follow the 🚀 and execute all the steps.
 1. Click on the Rocket 🚀 for entry `24_Install ManageIQ` to install a base `ManageIQ` instance.
 2. The Job will start with the installation
 2. Wait until the Job has finished 
+
+<div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
 # 4 AI Manager Configuration
@@ -658,6 +672,7 @@ The last few lines scales down the NGINX pods and scales them back up. It takes 
 
 Once those pods have come back up, you can verify the certificate is secure by logging in to AIOps. Note that the login page is not part of AIOps, but rather part of Foundational Services. So you will have to login first and then check that the certificate is valid once logged in. If you want to update the certicate for Foundational Services you can find instructions [here](https://www.ibm.com/docs/en/cpfs?topic=operator-replacing-foundational-services-endpoint-certificates).
 
+<div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
 ## 4.4 Some Polishing
@@ -683,6 +698,7 @@ Once those pods have come back up, you can verify the certificate is secure by l
 * 
 
 
+<div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
 # 5 Event Manager Configuration
@@ -872,14 +888,8 @@ Then
 # 6 Runbook Configuration
 ---------------------------------------------------------------
 
-## 6.1 Configure Runbooks with AWX 
 
-This is the preferred method.
-
-Use Option 🐥`23` in [Easy Install](#-2-easy-install) to install an `AWX ` instance if you haven't done so yet.
-
-
-### 6.1.1. Configure AWX 
+## 6.1 Configure AWX 
 
 There is some demo content available to RobotShop.
 
@@ -900,7 +910,7 @@ There is some demo content available to RobotShop.
 
 
 
-### 6.1.2. Configure AWX Integration 
+## 6.2 Configure AWX Integration 
 
 In EventManager:
 
@@ -912,7 +922,7 @@ In EventManager:
 
 <div style="page-break-after: always;"></div>
 
-### 6.1.3. Configure Runbook 
+## 6.3 Configure Runbook 
 
 In EventManager:
 
@@ -941,7 +951,7 @@ Now you can test the Runbook by clicking on `Run`.
 
 <div style="page-break-after: always;"></div>
 
-### 6.1.4. Add Runbook Triggers 
+## 6.4 Add Runbook Triggers 
 
 1. Select `Automations` / `Runbooks`
 1. Select `Triggers` tab
@@ -1064,9 +1074,13 @@ Please jot this down.
 ---------------------------------------------------------------
 
 
-## 9.1 Check with script
+## 9.1 Mitigation Job
 
-
+1. Log into AWX
+2. Click on `Templates`
+1. Click on the Rocket 🚀 for entry `91_Debug Patch`
+2. The Job will start applying all the known workarounds to get the instance up and running
+2. Wait until the Job has finished 
 
 
 ## 9.2 Check with script
@@ -1279,6 +1293,7 @@ Just run:
 ```
 
 
+<div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
 # 11 Service Now integration

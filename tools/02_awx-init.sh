@@ -223,7 +223,7 @@ echo "   🚀  Create Job: Install Rook Ceph"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "914_Install Rook Ceph",
+    "name": "14_Install Rook Ceph",
     "description": "Install Rook Ceph",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -242,61 +242,6 @@ else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
-
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Install LDAP"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "915_Install LDAP",
-    "description": "Install LDAP and register users. This is usually already done by the AI Manager Installation.",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/15_install-ldap.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
-
-
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Install RobotShop"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "916_Install RobotShop",
-    "description": "Install RobotShop. This is usually already done by the AI Manager Installation.",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/16_install-robot-shop.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
@@ -587,136 +532,32 @@ else
 fi 
 
 
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Create"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "985_Training Create",
-    "description": "Training Create (executed by 84_Training All Models)",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/85_training-create.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
 
 
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Install LDAP"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "915_Install LDAP",
+#     "description": "Install LDAP and register users. This is usually already done by the AI Manager Installation.",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/15_install-ldap.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
 
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Load Log"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "986_Training Load Log",
-    "description": "Training Load Log (executed by 84_Training All Models)",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/86_training-load-logs.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Run Log"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "987_Training Run Log",
-    "description": "Training Run Log (executed by 84_Training All Models)",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/87_training-run-logs.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
-
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Load SNOW"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "986_Training Load SNOW",
-    "description": "Training Load SNOW (executed by 84_Training All Models)",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/86_training-load-snow.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
-
-
-echo ""
-echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Run SNOW"
-export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
--H 'content-type: application/json' \
--d $'{
-    "name": "987_Training Run SNOW",
-    "description": "Training Run SNOW (executed by 84_Training All Models)",
-    "job_type": "run",
-    "inventory": '$INVENTORY_ID',
-    "project": '$PROJECT_ID',
-    "playbook": "ansible/87_training-run-snow.yaml",
-    "scm_branch": "",
-    "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
-}
-')
-
-if [[ $result =~ " already exists" ]];
-then
-    echo "        Already exists."
-else
-    echo "        Job created: "$(echo $result|jq ".created")
-fi 
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
 
 
 
@@ -745,6 +586,165 @@ then
 else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
+
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Install RobotShop"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "916_Install RobotShop",
+#     "description": "Install RobotShop. This is usually already done by the AI Manager Installation.",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/16_install-robot-shop.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Training Create"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "985_Training Create",
+#     "description": "Training Create (executed by 84_Training All Models)",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/85_training-create.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Training Load Log"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "986_Training Load Log",
+#     "description": "Training Load Log (executed by 84_Training All Models)",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/86_training-load-logs.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Training Run Log"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "987_Training Run Log",
+#     "description": "Training Run Log (executed by 84_Training All Models)",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/87_training-run-logs.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Training Load SNOW"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "986_Training Load SNOW",
+#     "description": "Training Load SNOW (executed by 84_Training All Models)",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/86_training-load-snow.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+
+# echo ""
+# echo "   ------------------------------------------------------------------------------------------------------------------------------"
+# echo "   🚀  Create Job: Training Run SNOW"
+# export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+# -H 'content-type: application/json' \
+# -d $'{
+#     "name": "987_Training Run SNOW",
+#     "description": "Training Run SNOW (executed by 84_Training All Models)",
+#     "job_type": "run",
+#     "inventory": '$INVENTORY_ID',
+#     "project": '$PROJECT_ID',
+#     "playbook": "ansible/87_training-run-snow.yaml",
+#     "scm_branch": "",
+#     "extra_vars": "",
+#     "execution_environment": '$EXENV_ID'
+# }
+# ')
+
+# if [[ $result =~ " already exists" ]];
+# then
+#     echo "        Already exists."
+# else
+#     echo "        Job created: "$(echo $result|jq ".created")
+# fi 
+
+
 
 
 
