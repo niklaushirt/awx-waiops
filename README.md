@@ -38,9 +38,10 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 	1. [Installing Humio](#35-installing-humio)
 	1. [Installing ServiceMest/Istio](#36-installing-servicemesh)
 	1. [Installing AWX/AnsibleTower](#37-installing-awx)
-	1. [Installing AWX/AnsibleTower](#38-installing-manageiq
+	1. [Installing ManageIQ](#38-installing-manageiq
 )
 1. [AI Manager Configuration](#4-ai-manager-configuration)
+1. [Event Manager Configuration](#5-event-manager-configuration)
 1. [EventManager Configuration](#11-eventmanager-configuration)
 1. [Runbook Configuration](#12-runbook-configuration)
 
@@ -400,7 +401,7 @@ Just click and follow the 🚀 and execute the steps marked with  .
 2. The Job will start with the installation
 2. Wait until the Job has finished 
 
-## 3.7 Installing ManageIQ 
+## 3.8 Installing ManageIQ 
 
 1. Log into AWX
 2. Click on `Templates`
@@ -557,7 +558,7 @@ This will be done for:
 ### 4.3 Slack integration
 
 
-### 4.3.1 Initial Slack Setup 🟢
+### 4.3.1 Initial Slack Setup 
 
 For the system to work you need to setup your own secure gateway and slack workspace. It is suggested that you do this within the public slack so that you can invite the customer to the experience as well. It also makes it easier for is to release this image to Business partners
 
@@ -577,7 +578,7 @@ Here are the steps to follow:
 
 <div style="page-break-after: always;"></div>
 
-### 4.3.2 Create valid CP4WAIOPS Certificate 🟢
+### 4.3.2 Create valid CP4WAIOPS Certificate 
 
 
 In order for Slack integration to work, there must be a signed certicate on the NGNIX pods. The default certificate is self-signed and Slack will not accept that. The method for updating the certificate has changed between AIOps v2.1 and V3.1.1. The NGNIX pods in V3.1.1 mount the certificate through a secret called `external-tls-secret` and that takes precedent over the certificates staged under `/user-home/_global_/customer-certs/`.
@@ -678,7 +679,7 @@ Once those pods have come back up, you can verify the certificate is secure by l
 ## 4.4 Some Polishing
 ---------------------------------------------------------------
 
-### 4.4.1 Add LDAP Logins to CP4WAIOPS 🟢
+### 4.4.1 Add LDAP Logins to CP4WAIOPS 
 
 
 * Go to `AI Manager` Dashboard
@@ -696,6 +697,191 @@ Once those pods have come back up, you can verify the certificate is secure by l
 * Click Next
 * Click Create
 * 
+
+
+
+---------------------------------------------------------------
+# 5 Event Manager Configuration
+---------------------------------------------------------------
+
+❗ You only have to do this if you have installed EventManager/NOI (As described in Easy Install - Chapter 6). For basic demoing with AI MAnager this is not needed.
+
+
+
+
+## 5.1 Create Kubernetes Observer for the Demo Applications 
+
+This is basically the same as for AI Manager as we need two separate instances of the Topology Manager. 
+
+
+* In the `Event Manager` "Hamburger" Menu select `Administration`/`Topology Management`
+* Under `Observer jobs` click `Configure`
+* Click `Add new job`
+* Under `Kubernetes`, click on `Configure`
+* Choose `local` for `Connection Type`
+* Set `Unique ID` to `robot-shop`
+* Set `data_center` to `robot-shop`
+* Under `Additional Parameters`
+* Set `Terminated pods` to `true`
+* Set `Correlate` to `true`
+* Set Namespace to `robot-shop`
+* Under `Job Schedule`
+* Set `Time Interval` to 5 Minutes
+* Click `Save`
+
+
+
+
+## 5.2 Create REST Observer to Load Topologies 
+
+* In the `Event Manager` "Hamburger" Menu select `Administration`/`Topology Management`
+* Under `Observer jobs` click `Configure`
+* Click `Add new job`
+* Under `REST`, click on `Configure`
+* Choose `bulk_replace` for `Job Type`
+* Set `Unique ID` to `listenJob` (important!)
+* Set `Provider` to `listenJob` 
+* Click `Save`
+
+
+
+
+
+
+
+<div style="page-break-after: always;"></div>
+
+## 5.3 🚀 Create Topology 
+
+1. Log into AWX
+2. Click on `Templates`
+1. Click on the Rocket 🚀 for entry `81_Topology Load for Event Manager` to install a base `AI Manager` instance.
+
+❗ Please manually re-run the Kubernetes Observer to make sure that the merge has been done.
+
+
+## 5.4 EventManager Webhook 
+
+Create Webhooks in EventManager for Event injection and incident simulation for the Demo.
+
+The demo scripts (in the `demo` folder) give you the possibility to simulate an outage without relying on the integrations with other systems.
+
+At this time it simulates:
+
+- Git push event
+- Log Events (Humio)
+- Security Events (Falco)
+- Instana Events
+- Metric Manager Events (Predictive)
+- Turbonomic Events
+- CP4MCM Synthetic Selenium Test Events
+
+
+
+<div style="page-break-after: always;"></div>
+
+
+You have to define the following Webhook in EventManager (NOI): 
+
+* `Administration` / `Integration with other Systems`
+* `Incoming` / `New Integration`
+* `Webhook`
+* Name it `Demo Generic`
+* Jot down the WebHook URL and copy it to the `NETCOOL_WEBHOOK_GENERIC` in the `./tools/01_demo/incident_robotshop-noi.sh`file
+* Click on `Optional event attributes`
+* Scroll down and click on the + sign for `URL`
+* Click `Confirm Selections`
+
+
+Use this json:
+
+```json
+{
+  "timestamp": "1619706828000",
+  "severity": "Critical",
+  "summary": "Test Event",
+  "nodename": "productpage-v1",
+  "alertgroup": "robotshop",
+  "url": "https://pirsoscom.github.io/grafana-robotshop.html"
+}
+```
+
+Fill out the following fields and save:
+
+* Severity: `severity`
+* Summary: `summary`
+* Resource name: `nodename`
+* Event type: `alertgroup`
+* Url: `url`
+* Description: `"URL"`
+
+Optionnally you can also add `Expiry Time` from `Optional event attributes` and set it to a convenient number of seconds (just make sure that you have time to run the demo before they expire.
+
+<div style="page-break-after: always;"></div>
+
+## 5.5 Create custom Filter and View in EventManager 
+
+### 5.5.1 Filter 
+
+Duplicate the `Default` filter and set to global.
+
+* Name: AIOPS
+* Logic: **Any** (!)
+* Filter:
+	* AlertGroup = 'CEACorrelationKeyParent'
+	* AlertGroup = 'robot-shop'
+
+#### 11.1.5.2 View 
+
+Duplicate the `Example_IBM_CloudAnalytics` View and set to global.
+
+
+* Name: AIOPS
+
+Configure to your likings.
+
+
+## 5.6 Create grouping Policy 
+
+* NetCool Web Gui --> `Insights` / `Scope Based Grouping`
+* Click `Create Policy`
+* `Action` select fielt `Alert Group`
+* Toggle `Enabled` to `On`
+* Save
+
+<div style="page-break-after: always;"></div>
+
+## 5.7 Create EventManager/NOI Menu item - Open URL 
+
+in the Netcool WebGUI
+
+* Go to `Administration` / `Tool Configuration`
+* Click on `LaunchRunbook`
+* Copy it (the middle button with the two sheets)
+* Name it `Launch URL`
+* Replace the Script Command with the following code
+
+	```javascript
+	var urlId = '{$selected_rows.URL}';
+	
+	if (urlId == '') {
+	    alert('This event is not linked to an URL');
+	} else {
+	    var wnd = window.open(urlId, '_blank');
+	}
+	```
+* Save
+
+Then 
+
+* Go to `Administration` / `Menu Configuration`
+* Select `alerts`
+* Click on `Modify`
+* Move Launch URL to the right column
+* Save
+
+<div style="page-break-after: always;"></div>
+
 
 
 ---------------------------------------------------------------

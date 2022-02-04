@@ -508,12 +508,12 @@ fi
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Topology Load"
+echo "   🚀  Create Job: Topology Load for AI Manager"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "80_Topology Load",
-    "description": "Topology Load",
+    "name": "80_Topology Load for AI Manager",
+    "description": "Topology Load for AI Manager",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -531,6 +531,32 @@ else
     echo "        Job created: "$(echo $result|jq ".created")
 fi 
 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Topology Load for Event Manager"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "82_Topology Load for Event Manager",
+    "description": "Topology Load for Event Manager",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/80_load-topology.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
 
 
 
