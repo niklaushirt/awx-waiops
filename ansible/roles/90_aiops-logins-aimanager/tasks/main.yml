@@ -1,0 +1,53 @@
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Connection Details
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+# *************************************************************************************************************************************************
+# --------------------------------------------------------------------------------------------------------------------------------------
+# Get Cluster FQDN
+# --------------------------------------------------------------------------------------------------------------------------------------
+# *************************************************************************************************************************************************
+
+- name: PREREQUISITES -  🌏 Get Cluster FQDN
+  shell: |
+    CLUSTER_ROUTE=$(oc get routes console -n openshift-console | tail -n 1 2>&1 ) 
+    CLUSTER_FQDN=$( echo $CLUSTER_ROUTE | awk '{print $2}')
+    echo ${CLUSTER_FQDN##*console.}
+  register: CLUSTER_NAME
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------
+# WAIOPS
+# --------------------------------------------------------------------------------------------------------------------------------------
+- name: LOGIN -  🚀 WAIOPS
+  shell: |
+    echo "CloudPak for Watson AIOps"
+    echo "**********************************************************************************************************************************"
+    echo "CP4WAIOPS"
+    echo "**********************************************************************************************************************************"
+    echo "    AIOPS:"
+    echo "        URL:      https://$(oc get route -n {{ WAIOPS_NAMESPACE }} cpd -o jsonpath={.spec.host})"
+    echo "        ADMIN USER:"
+    echo "         User:     $(oc -n ibm-common-services get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 --decode && echo)"
+    echo "         Password: $(oc -n ibm-common-services get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 --decode)"
+    echo " "
+    echo "    Administration hub / Common Services"
+    echo "        URL:      https://$(oc get route -n ibm-common-services cp-console -o jsonpath={.spec.host})"
+    echo "        User:     $(oc -n ibm-common-services get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_username}' | base64 --decode && echo)"
+    echo "        Password: $(oc -n ibm-common-services get secret platform-auth-idp-credentials -o jsonpath='{.data.admin_password}' | base64 --decode)"
+    echo " "
+    echo " "
+    echo " "
+    echo " "
+  register: output_string
+  ignore_errors: yes
+- name: LOGIN -          🔐 WAIOPS
+  debug: 
+    var: output_string.stdout_lines
+  #when: PRINT_LOGINS == true
+
+

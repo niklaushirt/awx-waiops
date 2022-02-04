@@ -88,7 +88,7 @@
 
 
 # Get all login credentials
-    - role: 90_aiops-logins
+    - role: 90_aiops-logins-aimanager
       when: PRINT_LOGINS
 
 
