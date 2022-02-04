@@ -42,28 +42,14 @@ Please drop me a note on Slack or by mail nikh@ch.ibm.com if you find glitches o
 )
 1. [AI Manager Configuration](#4-ai-manager-configuration)
 1. [Event Manager Configuration](#5-event-manager-configuration)
-1. [EventManager Configuration](#11-eventmanager-configuration)
-1. [Runbook Configuration](#12-runbook-configuration)
-
-1. [Configure Applications and Topology](#4-configure-applications-and-topology)
-1. [Training](#5-training)
-1. [Slack integration](#6-slack-integration)
-1. [Some Polishing](#7-some-polishing)
-1. [Demo the Solution](#8-demo-the-solution)
+1. [Runbook Configuration](#6-runbook-configuration)
+1. [Demo the Solution](#7-demo-the-solution)
+1. [Additional Configuration](#8-additional-configuration)
 1. [Troubleshooting](#9-troubleshooting)
 1. [Uninstall CP4WAIOPS](#10-uninstall)
-1. [EventManager Configuration](#11-eventmanager-configuration)
-1. [Runbook Configuration](#12-runbook-configuration)
-1. [Installing Turbonomic](#13-installing-turbonomic)
-1. [Installing ELK (optional)](#14-installing-ocp-elk)
-1. [Installing Humio (optional)](#15-humio)
-1. [Installing ServiceMest/Istio (optional)](#16-servicemesh)
-1. [Installing AWX/AnsibleTower (optional)](#17-awx)
-1. [Detailed Prerequisites](#18-detailed-prerequisites)
-1. [Detailed CP4WAIOPS Installation](#19-detailed-cp4waiops-installation)
-1. [Additional Configuration](#20-additional-configuration)
-1. [Service Now integration](#21-service-now-integration)
-1. [Manually train the models](#22-manually-train-the-models)
+1. [Service Now integration](#11-service-now-integration)
+1. [Annex](#12-annex)
+
 
 > ❗You can find a PDF version of this guide here: [PDF](./INSTALL_CP4WAIOPS.pdf).
 
@@ -328,7 +314,7 @@ There are some minimal configurations that you have to do to use the demo system
 ###   🚀 Start here [Create Kubernetes Observer](#51-create-kubernetes-observer-for-event-manager)
 
 
-Just click and follow the 🚀 and execute the steps marked with  .
+Just click and follow the 🚀 and execute all the steps.
 
 > ### Minimal Configuration
 > 
@@ -883,7 +869,459 @@ Then
 
 
 ---------------------------------------------------------------
-# 9 ANNEX
+# 6 Runbook Configuration
+---------------------------------------------------------------
+
+## 6.1 Configure Runbooks with AWX 
+
+This is the preferred method.
+
+Use Option 🐥`23` in [Easy Install](#-2-easy-install) to install an `AWX ` instance if you haven't done so yet.
+
+
+### 6.1.1. Configure AWX 
+
+There is some demo content available to RobotShop.
+
+1. Log in to AWX
+2. Add a new Project
+	1. Name it `DemoCP4WAIOPS`
+	1. Source Control Credential Type to `Git`
+	1. Set source control URL to `https://github.com/niklaushirt/ansible-demo`
+	2. Save
+	
+1. Add new Job Template
+	1. Name it `Mitigate Robotshop Ratings Outage`
+	2. Select Inventory `Demo Inventory`
+	3. Select Project `DemoCP4WAIOPS`
+	4. Select Playbook `cp4waiops/robotshop-restart/start-ratings.yaml`
+	5. Select` Prompt on launch` for `Variables`  ❗
+	2. Save
+
+
+
+### 6.1.2. Configure AWX Integration 
+
+In EventManager:
+
+1. Select `Administration` / `Integration with other Systems`
+1. Select `Automation type` tab
+1. For `Ansible Tower` click  `Configure`
+2. Enter the URL and credentials for your AWX instance (you can use the defautl `admin` user)
+3. Click Save
+
+<div style="page-break-after: always;"></div>
+
+### 6.1.3. Configure Runbook 
+
+In EventManager:
+
+1. Select `Automations` / `Runbooks`
+1. Select `Library` tab
+1. Click  `New Runbook`
+1. Name it `Mitigate Robotshop Ratings Outage`
+1. Click `Add automated Step`
+2. Select the `Mitigate Robotshop Ratings Outage` Job
+3. Click `Select this automation`
+4. Select `New Runbook Parameter`
+5. Name it `ClusterCredentials`
+6. Input the login credentials in JSON Format (get the URL and token from the 20_get_logins.sh script)
+
+	```json
+	{     
+		"my_k8s_apiurl": "https://c117-e.xyz.containers.cloud.ibm.com:12345",
+		"my_k8s_apikey": "PASTE YOUR API KEY"
+	}
+	```
+7. Click Save
+7. Click Publish
+
+
+Now you can test the Runbook by clicking on `Run`.
+
+<div style="page-break-after: always;"></div>
+
+### 6.1.4. Add Runbook Triggers 
+
+1. Select `Automations` / `Runbooks`
+1. Select `Triggers` tab
+1. Click  `New Trigger `
+1. Name it `Mitigate Robotshop Ratings Outage`
+1. Add conditions:
+   * Conditions
+	* Name: RobotShop
+	* Attribute: Node
+	* Operator: Equals
+	* Value: mysql-instana or mysql-predictive
+1. Click `Run Test`
+2. You should get an Event `[Instana] Robotshop available replicas is less than desired replicas - Check conditions and error events - ratings`
+3. Select `Mitigate RobotShop Problem`
+4. Click `Select This Runbook`
+5. Toggle `Execution` / `Automatic` to `off`
+6. Click `Save`
+
+
+<div style="page-break-after: always;"></div>
+
+
+
+
+---------------------------------------------------------------
+# 7 Demo the Solution
+---------------------------------------------------------------
+
+
+
+## 7.1 Simulate incident
+
+**Make sure you are logged-in to the Kubernetes Cluster first** 
+
+In the terminal type 
+
+```bash
+./tools/01_demo/incident_robotshop.sh
+```
+
+This will delete all existing Alerts and inject pre-canned event and logs to create a story.
+
+ℹ️  Give it a minute or two for all events and anomalies to arrive in Slack.
+
+
+
+
+<div style="page-break-after: always;"></div>
+
+
+
+
+---------------------------------------------------------------
+# 8 Additional Configuration
+---------------------------------------------------------------
+
+## 8.1 Setup remote Kubernetes Observer
+
+
+
+### 8.1.1. Get Kubernetes Cluster Access Details
+
+As part of the kubernetes observer, it is required to communicate with the target cluster. So it is required to have the URL and Access token details of the target cluster. 
+
+Do the following.
+
+
+#### 8.1.1.1. Login
+
+Login into the remote Kubernetes cluster on the Command Line.
+
+#### 8.1.1.2. Access user/token 
+
+
+Run the following:
+
+```
+./tools/97_addons/k8s-remote/remote_user.sh
+```
+
+This will create the remote user if it does not exist and print the access token (also if you have already created).
+
+Please jot this down.
+
+
+
+### 8.1.1. Create Kubernetes Observer Connection
+
+
+
+* In the `AI Manager` "Hamburger" Menu select `Operate`/`Data and tool integrations`
+* Click `Add connection`
+* Under `Kubernetes`, click on `Add Integration`
+* Click `Connect`
+* Name it `RobotShop`
+* Data Center `demo`
+* Click `Next`
+* Choose `Load` for Connection Type
+* Input the URL you have gotten from the step above in `Kubernetes master IP address` (without the https://)
+* Input the port for the URL you have gotten from the step above in `Kubernetes API port`
+* Input the `Token` you have gotten from the step above
+* Set `Trust all certificates by bypassing certificate verification` to `On`
+* Set `Hide pods that have been terminated` to `On`
+* Set `Correlate analytics events on the namespace groups created by this job` to `On`
+* Set Namespace to `robot-shop`
+* Click `Next`
+* Click `Done`
+
+
+![](./doc/pics/k8s-remote.png)
+
+
+
+<div style="page-break-after: always;"></div>
+
+
+---------------------------------------------------------------
+
+# 9. TROUBLESHOOTING
+---------------------------------------------------------------
+
+
+## 9.1 Check with script
+
+
+
+
+## 9.2 Check with script
+
+❗ There is a new script that can help you automate some common problems in your CP4WAIOPS installation.
+
+Just run:
+
+```
+./tools/10_debug_install.sh
+```
+
+and select `Option 1`
+
+
+## 9.3 Pods in Crashloop
+
+If the evtmanager-topology-merge and/or evtmanager-ibm-hdm-analytics-dev-inferenceservice are crashlooping, apply the following patches. I have only seen this happen on ROKS.
+
+```bash
+export WAIOPS_NAMESPACE=cp4waiops
+
+oc patch deployment evtmanager-topology-merge -n $WAIOPS_NAMESPACE --patch-file ./yaml/waiops/pazch/topology-merge-patch.yaml
+
+
+oc patch deployment evtmanager-ibm-hdm-analytics-dev-inferenceservice -n $WAIOPS_NAMESPACE --patch-file ./yaml/waiops/patch/evtmanager-inferenceservice-patch.yaml
+```
+
+
+<div style="page-break-after: always;"></div>
+
+## 9.4 Pods with Pull Error
+
+If the ir-analytics or cassandra job pods are having pull errors, apply the following patches. 
+
+```bash
+export WAIOPS_NAMESPACE=cp4waiops
+
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-topology-service-account -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-analytics-spark-worker -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-analytics-spark-pipeline-composer -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-analytics-spark-master -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-analytics-probablecause -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-analytics-classifier -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+kubectl patch -n $WAIOPS_NAMESPACE serviceaccount aiops-ir-lifecycle-eventprocessor-ep -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
+oc delete pod $(oc get po -n $WAIOPS_NAMESPACE|grep ImagePull|awk '{print$1}') -n $WAIOPS_NAMESPACE
+
+
+```
+
+
+## 9.5 Camel-K Handlers Error
+
+If the scm-handler or snow-handler pods are not coming up, apply the following patches. 
+
+```bash
+export WAIOPS_NAMESPACE=cp4waiops
+
+oc patch vaultaccess/ibm-vault-access -p '{"spec":{"token_period":"760h"}}' --type=merge -n $WAIOPS_NAMESPACE
+oc delete pod $(oc get po -n $WAIOPS_NAMESPACE|grep 0/| grep -v "Completed"|awk '{print$1}') -n $WAIOPS_NAMESPACE
+
+```
+
+
+
+
+## 9.6 Slack integration not working
+
+See [here](#432-create-valid-cp4waiops-certificate)
+
+<div style="page-break-after: always;"></div>
+
+
+
+## 9.7 Check if data is flowing
+
+### 9.7.1 Check Log injection
+
+To check if logs are being injected through the demo script:
+
+1. Launch 
+
+	```bash
+	./tools/22_monitor_kafka.sh
+	```
+2. Select option 4
+
+You should see data coming in.
+
+### 9.7.2 Check Events injection
+
+To check if events are being injected through the demo script:
+
+1. Launch 
+
+	```bash
+	./tools/22_monitor_kafka.sh
+	```
+2. Select option 3
+
+You should see data coming in.
+
+### 9.7.3 Check Stories being generated
+
+To check if stories are being generated:
+
+1. Launch 
+
+	```bash
+	./tools/22_monitor_kafka.sh
+	```
+2. Select option 2
+
+You should see data being generated.
+
+<div style="page-break-after: always;"></div>
+
+## 9.8 Docker Pull secret
+
+####  ❗⚠️ Make a copy of the secret before modifying 
+####  ❗⚠️ On ROKS (any version) and before 4.7 you have to restart the worker nodes after the modification  
+
+We learnt this the hard way...
+
+```bash
+oc get secret -n openshift-config pull-secret -oyaml > pull-secret_backup.yaml
+```
+
+or more elegant
+
+```bash
+oc get Secret -n openshift-config pull-secret -ojson | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.generation, .metadata.managedFields, .metadata.resourceVersion , .metadata.selfLink , .metadata.uid, .status)' > pull-secret_backup.json
+```
+
+In order to avoid errors with Docker Registry pull rate limits, you should add your Docker credentials to the Cluster.
+This can occur especially with Rook/Ceph installation.
+
+* Go to Secrets in Namespace `openshift-config`
+* Open the `pull-secret`Secret
+* Select `Actions`/`Edit Secret` 
+* Scroll down and click `Add Credentials`
+* Enter your Docker credentials
+
+	![](./doc/pics/dockerpull.png)
+
+* Click Save
+
+If you already have Pods in ImagePullBackoff state then just delete them. They will recreate and should pull the image correctly.
+
+
+
+
+<div style="page-break-after: always;"></div>
+
+## 9.9 Monitor ElasticSearch Indexes
+
+At any moment you can run `./tools/28_access_elastic.sh` in a separate terminal window.
+
+This allows you to access ElasticSearch and gives you:
+
+* ES User
+* ES Password
+
+	![](./doc/pics/es0.png)
+	
+
+### 9.9.1 Monitor ElasticSearch Indexes from Firefox
+
+I use the [Elasticvue](https://addons.mozilla.org/en-US/firefox/addon/elasticvue/) Firefox plugin.
+
+Follow these steps to connects from Elasticvue:
+
+- Select `Add Cluster` 
+	![](./doc/pics/es1.png)
+
+<div style="page-break-after: always;"></div>
+
+- Put in the credentials and make sure you put `https` and not `http` in the URL
+	![](./doc/pics/es2.png)
+- Click `Test Connection` - you will get an error
+- Click on the `https://localhost:9200` URL
+	![](./doc/pics/es3.png)
+	
+<div style="page-break-after: always;"></div>
+
+- This will open a new Tab, select `Accept Risk and Continue` 
+	![](./doc/pics/es4.png)
+- Cancel the login screen and go back to the previous tab
+- Click `Connect` 
+- You should now be connected to your AI Manager ElasticSearch instance 
+	![](./doc/pics/es5.png)
+
+<div style="page-break-after: always;"></div>
+
+---------------------------------------------------------------
+# 10. Uninstall
+---------------------------------------------------------------
+
+❗ The scritps are coming from here [https://github.com/IBM/cp4waiops-samples.git](https://github.com/IBM/cp4waiops-samples.git)
+
+If you run into problems check back if there have been some updates.
+
+
+I have tested those on 3.1.1 as well and it seemed to work (was able to do a complete reinstall afterwards).
+
+Just run:
+
+```
+./tools/99_uninstall/3.2/uninstall-cp4waiops.props
+```
+
+
+
+---------------------------------------------------------------
+# 11 Service Now integration
+---------------------------------------------------------------
+
+
+
+## 11.1 Integration 
+
+1. Follow [this](./doc/servicenow/snow-Integrate.md) document to get and configure your Service Now Dev instance with CP4WAIOPS.
+	Stop at `Testing the ServiceNow Integration`. 
+	❗❗Don’t do the training as of yet.
+2. Import the Changes from ./doc/servicenow/import_change.xlsx
+	1. Select `Change - All` from the right-hand menu
+	2. Right Click on `Number`in the header column
+	3. Select Import
+	![](./doc/pics/snow3.png)
+	3. Chose the ./doc/servicenow/import_change.xlsx file and click `Upload`
+	![](./doc/pics/snow4.png)
+	3. Click on `Preview Imported Data`
+	![](./doc/pics/snow5.png)
+	3. Click on `Complete Import` (if there are errors or warnings just ignore them and import anyway)
+	![](./doc/pics/snow6.png)
+	
+3. Import the Incidents from ./doc/servicenow/import_incidents.xlsx
+	1. Select `Incidents - All` from the right-hand menu
+	2. Proceed as for the Changes but for Incidents
+	
+4. Now you can finish configuring your Service Now Dev instance with CP4WAIOPS by [going back](./doc/servicenow/snow-Integrate.md#testing-the-servicenow-integration) and continue whre you left off at `Testing the ServiceNow Integration`. 
+
+
+
+
+<div style="page-break-after: always;"></div>
+
+
+
+
+
+
+
+---------------------------------------------------------------
+# 12 ANNEX
 ---------------------------------------------------------------
 
 ## 9.1 Tool Pod Access
