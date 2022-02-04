@@ -1339,7 +1339,28 @@ Just run:
 # 12 ANNEX
 ---------------------------------------------------------------
 
-## 9.1 Tool Pod Access
+## 12.1 Tool Pod
+
+1. Log into AWX
+2. Click on `Templates`
+1. Click on the Rocket 🚀 for entry `17_Install CP4WAIOPS Toolbox` to install a `Tool Pod` instance.
+2. The Job will start with the installation
+2. Wait until the Job has finished 
+
+
+The `Tool Pod` contains several tools:
+
+* kubectl 
+* oc
+* k9s
+* git
+* nano
+* elasticdump
+* kafkacat
+* ansible
+* python
+
+### 12.1.1 Tool Pod Access
 
 ```bash
 oc exec -it $(oc get po -n default|grep cp4waiops-tools|awk '{print$1}') -n default -- /bin/bash
