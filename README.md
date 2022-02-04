@@ -325,7 +325,8 @@ Usually it's a good idea to store this in a file for later use:
 
 There are some minimal configurations that you have to do to use the demo system and that are covered by the following flow:
 
-###   🚀 Start here [Create Kubernetes Observer](#41-create-kubernetes-observer-for-the-demo-applications-)
+###   🚀 Start here [Create Kubernetes Observer](#51-create-kubernetes-observer-for-event-manager)
+
 
 Just click and follow the 🚀 and execute the steps marked with  .
 
@@ -338,21 +339,18 @@ Just click and follow the 🚀 and execute the steps marked with  .
 > 1. Create Kubernetes Observer
 > 1. Create REST Observer
 > 1. Create Topology (🚀 - Option 51)
-> 1. Create AIOps Application
 > 
-> **Models Training**
+> **Configure Integrations**
 > 
-> 1. Train the Models (🚀 - Option 55)
-> 1. Create Integrations
+> 1. EventManager Webhook 
 > 
-> **Configure Slack**
+>  **Configure Customization**
 > 
-> 1. Setup Slack
-> 1. Adapt Web Certificates
-> 
-> **Configure Logins**
-> 
-> 1. Configure LDAP Logins
+> 1. Create custom Filter 
+> 1. Create custom View 
+> 1. Create grouping Policy 
+> 1. Create EventManager/NOI Menu item - Open URL 
+
 
 
 <div style="page-break-after: always;"></div>
@@ -709,7 +707,7 @@ Once those pods have come back up, you can verify the certificate is secure by l
 
 
 
-## 5.1 Create Kubernetes Observer for the Demo Applications 
+## 5.1 Create Kubernetes Observer for Event Manager 
 
 This is basically the same as for AI Manager as we need two separate instances of the Topology Manager. 
 
