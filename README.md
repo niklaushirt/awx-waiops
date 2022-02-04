@@ -206,7 +206,7 @@ The following Components can be installed:
 || 81_Topology Load for Event Manager | Load the custom RobotShop Topology into Event Manager ASM | 
 || | | 
 | **Training** |  | |  
-|| 84_Training All Models | Create all training definitions (LAD, TemporalGrouping, Similar Incidents, Change Risk), loads the training data end runs the training | 
+|| 84_Train All Models | Create all training definitions (LAD, TemporalGrouping, Similar Incidents, Change Risk), loads the training data end runs the training | 
 || | | 
 | **Tools** | | |  
 || 12_Get CP4WAIOPS Logins | Get Logins for all Components | 

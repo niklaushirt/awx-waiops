@@ -508,12 +508,12 @@ fi
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create Job: Training Complete"
+echo "   🚀  Create Job: Train All Models"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "84_Training All Models",
-    "description": "Training All Models, takes about 5-7 Minutes",
+    "name": "84_Train All Models",
+    "description": "Train All Models, takes about 5-7 Minutes",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
