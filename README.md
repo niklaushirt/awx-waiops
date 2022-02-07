@@ -1002,10 +1002,14 @@ Now you can test the Runbook by clicking on `Run`.
 	![](./doc/pics/demoui2.png)
 1. Click `Back`
 1. Now you can use the buttons to simulate:
-	2. Only Events
-	3. Only Log Anomalies
-	4. or Both
+
+	* Only Events
+	* Only Log Anomalies
+	* or Both
 	![](./doc/pics/demoui1.png)
+
+1. The UI ewill confirm that the incident creation has been launched
+	![](./doc/pics/demoui3.png)
 
 
 
