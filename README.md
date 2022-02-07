@@ -1008,7 +1008,7 @@ Now you can test the Runbook by clicking on `Run`.
 	* or Both
 	![](./doc/pics/demoui1.png)
 
-1. The UI ewill confirm that the incident creation has been launched
+1. The UI will confirm that the incident creation has been launched
 	![](./doc/pics/demoui3.png)
 
 
