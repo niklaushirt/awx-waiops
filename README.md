@@ -148,10 +148,10 @@ spec:
 <div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
-## 2 Provide Entitlement
+# 2 Provide Entitlement
 ---------------------------------------------------------------
 
-### 2.1 Get the CP4WAIOPS installation token
+## 2.1 Get the CP4WAIOPS installation token
 
 You can get the installation (pull) token from [https://myibm.ibm.com/products-services/containerlibrary](https://myibm.ibm.com/products-services/containerlibrary).
 
@@ -160,7 +160,7 @@ This allows the CP4WAIOPS images to be pulled from the IBM Container Registry.
 <div style="page-break-after: always;"></div>
 
 
-### 2.2 Enter the CP4WAIOPS installation token
+## 2.2 Enter the CP4WAIOPS installation token
 
 1. Open the AWX instance
 2. Select `Inventories`
@@ -177,7 +177,7 @@ Yop are now ready to lauch the installations.
 <div style="page-break-after: always;"></div>
 
 ---------------------------------------------------------------
-## 3 Installing Components
+# 3 Installing Components
 ---------------------------------------------------------------
 
 The following Components can be installed:
@@ -980,9 +980,36 @@ Now you can test the Runbook by clicking on `Run`.
 # 7 Demo the Solution
 ---------------------------------------------------------------
 
+## 7.1 Simulate incident - Demo UI
+
+> ❗**In order to use the DEMO UI, you have to have followed through all the steps in [AI Manager Configuration](#4-ai-manager-configuration). Notably Configuring Topology, Integrations and having run the Models Training.**
+
+### 7.1.1 Install Demo UI
+
+1. Log into AWX
+2. Click on `Templates`
+1. Click on the Rocket 🚀 for entry `18_Install CP4WAIOPS Demo UI` to install the `Demo UI` instance.
+2. The Job will start with the installation
+2. Wait until the Job has finished 
+
+## 7.1.2 Simulate incident - Demo UI
+
+1. Run `./tools/20_get_logins.sh` to get the URL and Login Token.
+1. Open the URL and enter the Token.
+	![](./doc/pics/demoui1.png)
+1. Click on Configuration
+1. Verify that you have `Kafka Topics` shown for Events and Logs
+	![](./doc/pics/demoui2.png)
+1. Click `Back`
+1. Now you can use the buttons to simulate:
+	2. Only Events
+	3. Only Log Anomalies
+	4. or Both
+	![](./doc/pics/demoui1.png)
 
 
-## 7.1 Simulate incident
+
+## 7.2 Simulate incident - Command Line
 
 **Make sure you are logged-in to the Kubernetes Cluster first** 
 

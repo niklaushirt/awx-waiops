@@ -125,6 +125,29 @@ echo "    "
 
 
 
+DEMOUI_READY=$(oc get pod -n $WAIOPS_NAMESPACE | grep 'ibm-aiops-demo-ui' || true) 
+if [[ $DEMOUI_READY =~ "1/1" ]]; 
+then
+
+    echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+    echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+    echo "    🚀 Demo UI - Details"
+    echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+    echo "    -----------------------------------------------------------------------------------------------------------------------------------------------"
+    echo "    "
+    appURL=$(oc get routes -n $WAIOPS_NAMESPACE cp4waiops-demo-ui  -o jsonpath="{['spec']['host']}")|| true
+    appToken=$(oc get cm -n cp4waiops demo-ui-config -o jsonpath='{.data.TOKEN}')
+    echo "            📥 Demo UI:"   
+    echo "    " 
+    echo "                🌏 URL:           http://$appURL/"
+    echo "                🔐 Token:         $appToken"
+    echo ""
+    echo ""
+    appURL=$(oc get routes -n kubetoy kubetoy  -o jsonpath="{['spec']['host']}")|| true
+TOKEN
+fi
+
+
 
 
 EVTMGR_READY=$(oc get pod -n $EVTMGR_NAMESPACE | grep webgui-0|| true) 
