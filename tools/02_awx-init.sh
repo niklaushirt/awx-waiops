@@ -577,7 +577,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
-    "playbook": "ansible/89_aiops-debug-patches.yaml",
+    "playbook": "ansible/91_aiops-debug-patches.yaml",
     "scm_branch": "",
     "extra_vars": "",
     "execution_environment": '$EXENV_ID'
