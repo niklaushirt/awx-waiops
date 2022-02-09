@@ -30,7 +30,7 @@
     kind: Route
     name: topology-merge
     namespace: "{{ WAIOPS_NAMESPACE }}"
-  register: K8S_EXISTS
+  register: ROUTES_EXISTS 
 
 - name: CONFIG -             🚀 Create Topology Routes
   block:
@@ -48,7 +48,7 @@
     shell: oc create route passthrough topology-manage -n {{ WAIOPS_NAMESPACE }} --service=evtmanager-topology-topology --port=https-topology-api
     ignore_errors: yes
     when: CREATE_TOPO_ROUTE == true
-  when: K8S_EXISTS.resources|length == 0
+  when: ROUTES_EXISTS .resources|length == 0
 
 
 

@@ -30,7 +30,7 @@
   k8s_info:
     kind: Namespace
     name: "{{ EVTMGR_NAMESPACE }}"
-  register: K8S_EXISTS
+  register: EVENTMANAGER_EXISTS 
 
 - name: LOGIN -  🚀 ADDONS - EventManager
   block:
@@ -49,6 +49,6 @@
     debug: 
       var: output_string.stdout_lines
     #when: PRINT_LOGINS == true
-  when: K8S_EXISTS.resources|length != 0
+  when: EVENTMANAGER_EXISTS .resources|length != 0
 
 
