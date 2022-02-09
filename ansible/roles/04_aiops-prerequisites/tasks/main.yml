@@ -47,28 +47,8 @@
 
 
 
-# Patch OCP Registry
-# - name: PREREQUISITES -      🩹 Patch OCP Registry 
-#   shell: oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
-#   ignore_errors: yes
-
-
-
-# # Create IBM Entitlements Pull Secret
-# - name: PREREQUISITES -      🔎 Check Pull Secret
-#   k8s_info:
-#     kind: Secret
-#     name: ibm-entitlement-key
-#     namespace: "{{ WAIOPS_NAMESPACE }}"
-#   register: K8S_EXISTS
-# - name: DEBUG -              🟢 Output
-#   debug: 
-#     var: K8S_EXISTS.resources
-#     verbosity: 1
-
-
 # Create IBM Entitlements Pull Secret
-- name: PREREQUISITES -      🚀 Create Pull Secret
+- name: PREREQUISITES -      🚀 Create Pull Secret (ignore if there are errors)
   shell: |
     oc create secret docker-registry 'ibm-entitlement-key' --docker-server={{ ENTITLED_REGISTRY }} --docker-username={{ ENTITLED_REGISTRY_USER }} --docker-password={{ ENTITLED_REGISTRY_KEY }} --namespace={{ WAIOPS_NAMESPACE }}
     oc create secret docker-registry 'ibm-entitlement-key' --docker-server={{ ENTITLED_REGISTRY }} --docker-username={{ ENTITLED_REGISTRY_USER }} --docker-password={{ ENTITLED_REGISTRY_KEY }} --namespace=openshift-marketplace
@@ -79,11 +59,10 @@
     oc patch -n openshift-marketplace serviceaccount ibm-aiops-catalog -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
     oc patch -n openshift-marketplace serviceaccount default -p '{"imagePullSecrets": [{"name": "ibm-entitlement-key"}]}'
   ignore_errors: yes
-  when: K8S_EXISTS.resources|length == 0
 
 
 # Create aiops-topology-service-account
-- name: PREREQUISITES -      🚀 Create aiops-topology-service-account
+- name: PREREQUISITES -      🚀 Create aiops-topology-service-account (ignore if there are errors)
   shell: |
     cat <<EOF | oc apply -n {{ WAIOPS_NAMESPACE }} -f -
     apiVersion: v1
@@ -96,7 +75,6 @@
       - name: ibm-entitlement-key
     EOF
   ignore_errors: yes
-  when: K8S_EXISTS.resources|length == 0
 
 
 # Patch builder service account

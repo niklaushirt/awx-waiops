@@ -12,7 +12,7 @@
   k8s_info:
     kind: Namespace
     name: rook-ceph
-  register: K8S_EXISTS
+  register: ROOK_EXISTS 
 
 - name: ROOKCEPH -           🚀 Install Rook-Ceph
   block:
@@ -84,7 +84,7 @@
     ignore_errors: yes
     register: demo_robot_shop
     when: INSTALL_ROOK_CEPH
-  when: K8S_EXISTS.resources|length == 0
+  when: ROOK_EXISTS .resources|length == 0
 
 # --------------------------------------------------------------------------------------------------------------------------------------
 # Wait for rook-ceph Namespace to be ready

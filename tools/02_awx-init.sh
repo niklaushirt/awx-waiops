@@ -148,7 +148,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager with Demo content"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "10_Install CP4WAIOPS AI Manager with Demo content",
+    "name": "11_Install CP4WAIOPS AI Manager with Demo content",
     "description": "Install CP4WAIOPS AI Manager with Demo content (LDAP, RobotShop)",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -175,7 +175,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Event Manager"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "11_Install CP4WAIOPS AI Event Manager",
+    "name": "12_Install CP4WAIOPS AI Event Manager",
     "description": "11_Install CP4WAIOPS AI Event Manager",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -202,7 +202,7 @@ echo "   🚀  Create Job: Get CP4WAIOPS Logins"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "12_Get CP4WAIOPS Logins",
+    "name": "91_Get CP4WAIOPS Logins",
     "description": "90_Get CP4WAIOPS Logins",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -253,7 +253,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS Demo UI"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "18_Install CP4WAIOPS Demo UI",
+    "name": "17_Install CP4WAIOPS Demo UI",
     "description": "Install CP4WAIOPS Demo UI",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -280,7 +280,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS Toolbox"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "17_Install CP4WAIOPS Toolbox",
+    "name": "18_Install CP4WAIOPS Toolbox",
     "description": "Install CP4WAIOPS Toolbox",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',

@@ -16,7 +16,7 @@
   k8s_info:
     kind: Namespace
     name: "robot-shop"
-  register: K8S_EXISTS
+  register: DEMO_EXISTS 
 
 - name: DEMO -               🚀 Install RobotShop
   block:
@@ -52,7 +52,7 @@
       namespace: robot-shop
       src: ./templates/demo_apps/robotshop/load-deployment.yaml
     #when: INSTALL_DEMO_APPS == true
-  when: K8S_EXISTS.resources|length == 0
+  when: DEMO_EXISTS .resources|length == 0
 
 
 
@@ -63,7 +63,7 @@
   k8s_info:
     kind: Namespace
     name: "kubetoy"
-  register: K8S_EXISTS
+  register: DEMO_EXISTS 
 
 - name: DEMO -               🚀 Install Kubetoy
   block:
@@ -82,5 +82,5 @@
       namespace: kubetoy
       src: ./templates/demo_apps/kubetoy/kubetoy_all_in_one.yaml
     #when: INSTALL_DEMO_APPS == true
-  when: K8S_EXISTS.resources|length == 0
+  when: DEMO_EXISTS .resources|length == 0
 
