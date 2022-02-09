@@ -156,7 +156,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "playbook": "ansible/10_install-cp4waiops_ai_manager_only_with_demo.yaml",
     "scm_branch": "",
     "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
+    "execution_environment": '$EXENV_ID',
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nENTITLED_REGISTRY_KEY: CHANGEME"
 }
 ')
 
@@ -181,7 +183,9 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "playbook": "ansible/11_install-cp4waiops_event_manager.yaml",
     "scm_branch": "",
     "extra_vars": "",
-    "execution_environment": '$EXENV_ID'
+    "execution_environment": '$EXENV_ID',
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nENTITLED_REGISTRY_KEY: CHANGEME"
 }
 ')
 
