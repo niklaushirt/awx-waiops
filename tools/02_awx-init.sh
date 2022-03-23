@@ -147,8 +147,8 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 01"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 01 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#3-ai-manager-configuration",
-    "description": "Install CP4WAIOPS AI Manager Demo - Step 01",
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 01",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 01 - See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#3-ai-manager-configuration",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -157,7 +157,7 @@ export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u 
     "extra_vars": "",
     "execution_environment": '$EXENV_ID',
     "ask_variables_on_launch": true,
-    "extra_vars": "---\nENTITLED_REGISTRY_KEY: CHANGEME"
+    "extra_vars": "ENTITLED_REGISTRY_KEY: CHANGEME"
 }
 ')
 
@@ -176,8 +176,8 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 02"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 02 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#4-ai-manager-post-install-configuration",
-    "description": "Install CP4WAIOPS AI Manager Demo - Step 02 - Post Install",
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 02",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 02 - Post Install - See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#4-ai-manager-post-install-configuration",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
@@ -202,8 +202,8 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 03"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 03 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#5-ai-manager-finalize-configuration",
-    "description": "Install CP4WAIOPS AI Manager Demo - Step 03 - Finalize Install",
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 03",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 03 - Finalize Install - See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#5-ai-manager-finalize-configuration",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
     "project": '$PROJECT_ID',
