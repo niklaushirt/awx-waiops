@@ -51,7 +51,7 @@ echo ""
 
 echo ""
 echo "   ------------------------------------------------------------------------------------------------------------------------------"
-echo "   🚀  Create AWX Executon Environment"
+echo "   🚀  Create AWX Execution Environment"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
@@ -68,7 +68,7 @@ then
     export EXENV_ID=$(curl -X "GET" -s "https://$AWX_ROUTE/api/v2/execution_environments/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure|jq -c '.results[]| select( .name == "CP4WAIOPS Execution Environment")|.id')
     echo "        Already exists with ID:$EXENV_ID"
 else
-    echo "        Executon Environment created: "$(echo $result|jq ".created")
+    echo "        Execution Environment created: "$(echo $result|jq ".created")
     export EXENV_ID=$(echo $result|jq ".id")
 fi 
 
@@ -138,6 +138,88 @@ else
     sleep 15
 fi
 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 01"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 01 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#3-ai-manager-configuration",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 01",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/01_AIManager-install.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID',
+    "ask_variables_on_launch": true,
+    "extra_vars": "---\nENTITLED_REGISTRY_KEY: CHANGEME"
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 02"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 02 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#4-ai-manager-post-install-configuration",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 02 - Post Install",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/02_AIManager-post.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
+
+
+echo ""
+echo "   ------------------------------------------------------------------------------------------------------------------------------"
+echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 03"
+export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
+-H 'content-type: application/json' \
+-d $'{
+    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 03 \n See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#5-ai-manager-finalize-configuration",
+    "description": "Install CP4WAIOPS AI Manager Demo - Step 03 - Finalize Install",
+    "job_type": "run",
+    "inventory": '$INVENTORY_ID',
+    "project": '$PROJECT_ID',
+    "playbook": "ansible/03_AIManager-finalize.yaml",
+    "scm_branch": "",
+    "extra_vars": "",
+    "execution_environment": '$EXENV_ID'
+}
+')
+
+if [[ $result =~ " already exists" ]];
+then
+    echo "        Already exists."
+else
+    echo "        Job created: "$(echo $result|jq ".created")
+fi 
 
 
 
