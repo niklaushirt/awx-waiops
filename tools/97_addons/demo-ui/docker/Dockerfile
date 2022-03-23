@@ -4,11 +4,11 @@ FROM node:14-alpine
 WORKDIR /app
 ENV NODE_ENV production
 
-COPY ca.tcrt ./ca.crt
+COPY catpl.crt ca.crt
 RUN chmod 777 ca.crt
 
-COPY ssh-startup.sh ssh-startup.sh
-RUN chmod +x ssh-startup.sh
+COPY startup.sh startup.sh
+RUN chmod +x startup.sh
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
@@ -42,5 +42,5 @@ ENV KAFKA_TOPIC events
 EXPOSE 8080
 
 
-ENTRYPOINT /app/ssh-startup.sh
+ENTRYPOINT /app/startup.sh
 

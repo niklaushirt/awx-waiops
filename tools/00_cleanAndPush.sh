@@ -6,14 +6,14 @@ echo "**************************************************************************
 export gitCommitMessage=$(date +%Y%m%d-%H%M)
 
 echo "--------------------------------------------------------------------------------------------------------------------------------"
-echo "    🗄️  Make local copy ../ARCHIVE/awx-waiops-$gitCommitMessage"
+echo "    🗄️  Make local copy ../ARCHIVE/aiops-ansible-$gitCommitMessage"
 echo "--------------------------------------------------------------------------------------------------------------------------------"
 
-mkdir -p ../ARCHIVE/awx-waiops-$gitCommitMessage
+mkdir -p ../ARCHIVE/aiops-ansible-$gitCommitMessage
 
-cp -r * ../ARCHIVE/awx-waiops-$gitCommitMessage
-cp .gitignore ../ARCHIVE/awx-waiops-$gitCommitMessage
-
+cp -r * ../ARCHIVE/aiops-ansible-$gitCommitMessage
+cp .gitignore ../ARCHIVE/aiops-ansible-$gitCommitMessage
+ 
 
 echo "--------------------------------------------------------------------------------------------------------------------------------"
 echo "    🚀  Find File Copies"
@@ -42,6 +42,8 @@ echo "      ❎  Deleting node_modules"
 find . -name 'node_modules' -type d  -exec rm -rf {} \;
 echo "      ❎  Deleting files > 250MB"
 find . -type f -size +250M -delete
+echo "      ❎  Remove Downloaded Training Data"
+rm -r -f ./tools/02_training/TRAINING_FILES
 
 
 echo "--------------------------------------------------------------------------------------------------------------------------------"
@@ -50,6 +52,20 @@ echo "--------------------------------------------------------------------------
 cp ./tools/patches/templates/13_reset-slack.sh ./tools/98_reset/13_reset-slack.sh
 cp ./tools/patches/templates/14_reset-slack-changerisk.sh ./tools/98_reset/14_reset-slack-changerisk.sh
 cp ./tools/patches/templates/incident_robotshop-noi.sh ./tools/01_demo/incident_robotshop-noi.sh
+mkdir -p ./DO_NOT_DELIVER/LOGINS
+mkdir -p ./DO_NOT_DELIVER/LOGS
+mv -f ./LOGINS.txt ./DO_NOT_DELIVER/LOGINS/LOGINS-$gitCommitMessage.txt
+mv -f ./installAIManager.log ./DO_NOT_DELIVER/LOGS/installAIManager-$gitCommitMessage.log
+
+rm -f ./installAIManager* 
+rm -f ./LOGINS* 
+
+
+
+echo "--------------------------------------------------------------------------------------------------------------------------------"
+echo "    🚀  Remove Training Files"
+echo "--------------------------------------------------------------------------------------------------------------------------------"
+rm -fr ./tools/02_training/TRAINING_FILES
 
 
 echo "--------------------------------------------------------------------------------------------------------------------------------"
@@ -62,11 +78,6 @@ rm -f ./demo/iaf-system-backup.yaml
 rm -f ./external-tls-secret.yaml
 rm -f ./iaf-system-backup.yaml
 
-echo "--------------------------------------------------------------------------------------------------------------------------------"
-echo "    🚀  Remove Training Files"
-echo "--------------------------------------------------------------------------------------------------------------------------------"
-rm -fr ./tools/02_training/TRAINING_FILES
-
 export actBranch=$(git branch | tr -d '* ')
 echo "--------------------------------------------------------------------------------------------------------------------------------"
 echo "    🚀  Update Branch to $actBranch"
@@ -76,12 +87,19 @@ echo "--------------------------------------------------------------------------
 
 read -p " ❗❓ do you want to check-in the GitHub branch $actBranch with message $gitCommitMessage? [y,N] " DO_COMM
 if [[ $DO_COMM == "y" ||  $DO_COMM == "Y" ]]; then
-    echo "   ✅ Ok, checking in..."
-    git add . && git commit -m $gitCommitMessage && git push
+    echo "   ✅ Ok, committing..."
+    git add . && git commit -m $gitCommitMessage 
 else
     echo "    ⚠️  Skipping"
 fi
 
+read -p " ❗❓ Does this look OK? [y,N] " DO_COMM
+if [[ $DO_COMM == "y" ||  $DO_COMM == "Y" ]]; then
+    echo "   ✅ Ok, checking in..."
+    git push
+else
+    echo "    ⚠️  Skipping"
+fi
 
 
 

@@ -32,6 +32,12 @@ if [[ $HELP == "true" ]]; then
   exit 0
 fi 
 
+#export CP4WAIOPS_PROJECT=$(oc get po -A|grep aimanager-operator |awk '{print$1}')
+#export INSTALLATION_NAME=$(oc get installation.orchestrator.management.ibm.com -n $CP4WAIOPS_PROJECT |awk '{print$1}')
+
+
+
+
 analyze_script_properties
 
 # Confirm we really want to uninstall 

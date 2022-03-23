@@ -11,7 +11,11 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 - name: PREREQUISITES -      👓 Load parameters
-  include_vars: ./00_config_cp4waiops.yaml
+  include_vars: ../00_config_cp4waiops.yaml
+
+- name: TIMESTAMP -              🟢 START - INSTALL EVENT MANAGER
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 
 
 - name: PREREQUISITES -      📥  Installation Parameters"
@@ -38,7 +42,7 @@
 # *************************************************************************************************************************************************
 
 - name: PREREQUISITES -      🔐 Check Entitlement provided
-  fail: msg="Please provide IBM Entitlement Pull Secret Key/Token - ENTITLED_REGISTRY_KEY (Get it from here https://myibm.ibm.com/products-services/containerlibrary)"
+  fail: msg="Please provide IBM Entitlement Pull Secret Key/Token (Get it from here https://myibm.ibm.com/products-services/containerlibrary)"
   when: "ENTITLED_REGISTRY_KEY is not defined"
 
 
@@ -75,7 +79,10 @@
       echo $DECLARED_VERSION
     fi
   register: MAJOR_VERSION
+  args:
+    executable: /bin/bash
 
+    
 - name: OPENSHIFT VERSION -  💾 Set OCP_MAJOR_VERSION={{ MAJOR_VERSION.stdout_lines[0] }} 
   set_fact: OCP_MAJOR_VERSION={{ MAJOR_VERSION.stdout_lines[0] }} 
 
@@ -100,7 +107,7 @@
 - name: EVENTMANAGER -       🔐 Create Pull Secret for {{ EVTMGR_NAMESPACE }} Namespace
   shell: |
     oc create secret docker-registry 'ibm-entitlement-key' --docker-server={{ ENTITLED_REGISTRY }} --docker-username={{ ENTITLED_REGISTRY_USER }} --docker-password={{ ENTITLED_REGISTRY_KEY }} --namespace={{ EVTMGR_NAMESPACE }}
-    oc create secret docker-registry 'ibm-aiops-pull-secret' --docker-server={{ ENTITLED_REGISTRY }} --docker-username={{ ENTITLED_REGISTRY_USER }} --docker-password={{ ENTITLED_REGISTRY_KEY }} --namespace={{ EVTMGR_NAMESPACE }}
+    oc create secret docker-registry 'ibm-entitlement-key' --docker-server={{ ENTITLED_REGISTRY }} --docker-username={{ ENTITLED_REGISTRY_USER }} --docker-password={{ ENTITLED_REGISTRY_KEY }} --namespace={{ EVTMGR_NAMESPACE }}
   ignore_errors: yes
 
 
@@ -110,7 +117,7 @@
 - name: EVENTMANAGER -       🚀 Install Catalog
   kubernetes.core.k8s:
     state: present
-    src: ./templates/eventmanager/1_cat-ibm-eventmanager.yaml
+    template: ./templates/eventmanager/1_cat-ibm-eventmanager.j2
 
 
 

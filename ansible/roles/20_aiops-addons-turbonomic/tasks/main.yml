@@ -8,6 +8,21 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # Install Turbonomic
 # --------------------------------------------------------------------------------------------------------------------------------------
+
+- name: TIMESTAMP -              🟢 START - INSTALL TURBONOMIC
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: LOGGING -              🟢 WRITE TO LOGFILE
+  shell: |
+    export MESSAGE="Installing TURBONOMIC"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../installAIManager.log
+    echo $currentDate" - "$USER" - "$MESSAGE  >> ../installAIManager.log
+  ignore_errors: yes
+
+
 - name: TURBONOMIC -         🚀 Create Turbonomic namespace
   kubernetes.core.k8s:
     api_version: v1
@@ -25,54 +40,27 @@
   register: demo_robot_shop
         
 
-- name: TURBONOMIC -         🚀 Create Turbonomic service account
+- name: TURBONOMIC -         🚀 Create Turbonomic Operator Group
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
-    src: ./templates/turbonomic/service_account.yaml
+    src: ./templates/turbonomic/turbo-operatorgroup.yaml
   
 
 
-- name: TURBONOMIC -         🚀 Create Turbonomic roles
+- name: TURBONOMIC -         🚀 Create Turbonomic Subscription
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
-    src: ./templates/turbonomic/role.yaml
-  
-
-
-
-- name: TURBONOMIC -         🚀 Create Turbonomic role-bindings
-  kubernetes.core.k8s:
-    state: present
-    namespace: turbonomic
-    src: ./templates/turbonomic/role_binding.yaml
+    src: ./templates/turbonomic/turbo-subscription.yaml
   
 
 
 
-- name: TURBONOMIC -         🚀 Create Turbonomic CRD
+- name: TURBONOMIC -         🚀 Create Turbonomic Instance
   kubernetes.core.k8s:
     state: present
     namespace: turbonomic
-    src: ./templates/turbonomic/crds/charts_v1alpha1_xl_crd.yaml
-  
-
-
-
-- name: TURBONOMIC -         🚀 Create Turbonomic Operator
-  kubernetes.core.k8s:
-    state: present
-    namespace: turbonomic
-    src: ./templates/turbonomic/operator.yaml
-  
-
-
-
-- name: TURBONOMIC -         🚀 Create Turbonomic instance
-  kubernetes.core.k8s:
-    state: present
-    namespace: turbonomic
-    template: ./templates/turbonomic/my-turbo-instance.j2
+    template: ./templates/turbonomic/turbo-instance.j2
   
 

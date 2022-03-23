@@ -1,5 +1,14 @@
 const kafka = require("./kafka");
+const dateFormat = require('dateformat');
+var https = require("https");
 
+
+var options = {
+  host: 'www.google.com',
+  port: 80,
+  path: '/upload',
+  method: 'POST'
+};
 
 
 function parse_demo_event() {
@@ -14,6 +23,7 @@ function parse_demo_event() {
   const severityElement = "Severity"
   const managerElement = "Manager"
   const payload = process.env.DEMO_EVENTS || "{}"
+
 
 
   try {
@@ -88,8 +98,110 @@ function parse_demo_event() {
 
 
 
+function closeStories() {
+
+  const dlRoute = process.env.DATALAYER_ROUTE ||   "https://ibm.com"
+  const dlAuth = process.env.USER_PASS ||   "https://ibm.com"
 
 
+  console.log(`         🌏 ROUTE  ${dlRoute}`);
+  console.log(`         🌏 AUTH   ${dlAuth}`);
+  // curl "https://$DATALAYER_ROUTE/irdatalayer.aiops.io/active/v1/stories" --insecure --silent -X PATCH -u "${USER_PASS}" -d '{"state": "resolved"}' -H 'Content-Type: application/json' 
+  // -H "x-username:admin" 
+  // -H "x-subscription-id:cfd95b7e-3bc7-4006-a4a8-a73a79c71255" 
+
+  var options = {
+    host: dlRoute,
+    port: 443,
+    path: '/irdatalayer.aiops.io/active/v1/stories',
+    method: 'PATCH',
+    auth: dlAuth,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username' : 'admin',
+      'x-subscription-id' : 'cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+    },
+    "json": {"state": "resolved"}
+  };
+
+  var req = https.request(options, function(res) {
+    console.log('STATUS: ' + res.statusCode);
+    //console.log('HEADERS: ' + JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+  
+  // write data to request body
+  req.write('{"state": "resolved"}\n');
+  req.end();
+
+  try {
+    console.log("   📛 Close Stories");
+    console.log("  **************************************************************************************************");
+
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+
+function closeAlerts() {
+
+  const dlRoute = process.env.DATALAYER_ROUTE ||   "https://ibm.com"
+  const dlAuth = process.env.USER_PASS ||   "https://ibm.com"
+
+
+  console.log(`         🌏 ROUTE  ${dlRoute}`);
+  console.log(`         🌏 AUTH   ${dlAuth}`);
+  // curl "https://$DATALAYER_ROUTE/irdatalayer.aiops.io/active/v1/stories" --insecure --silent -X PATCH -u "${USER_PASS}" -d '{"state": "resolved"}' -H 'Content-Type: application/json' 
+  // -H "x-username:admin" 
+  // -H "x-subscription-id:cfd95b7e-3bc7-4006-a4a8-a73a79c71255" 
+
+  var options = {
+    host: dlRoute,
+    port: 443,
+    path: '/irdatalayer.aiops.io/active/v1/alerts?filter=type.classification%20%3D%20%27robot-shop%27',
+    method: 'PATCH',
+    auth: dlAuth,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-username' : 'admin',
+      'x-subscription-id' : 'cfd95b7e-3bc7-4006-a4a8-a73a79c71255'
+    },
+    "json": {"state": "closed"}
+  };
+
+  var req = https.request(options, function(res) {
+    console.log('STATUS: ' + res.statusCode);
+    //console.log('HEADERS: ' + JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+      console.log('BODY: ' + chunk);
+    });
+  });
+  
+  req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+  
+  // write data to request body
+  req.write('{"state": "closed"}\n');
+  req.end();
+
+  try {
+    console.log("   📛 Close Alerts");
+    console.log("  **************************************************************************************************");
+
+  } catch (ex) {
+    console.log(ex);
+  }
+}
 
 
 
@@ -98,30 +210,64 @@ function parse_demo_log() {
   const iterateElement = "logs"
   const payload = process.env.DEMO_LOGS || "{}"
   const iterations = process.env.LOG_ITERATIONS || "5"
-
-
+  const timeFormat = process.env.LOG_TIME_FORMAT ||   "yyyy-mm-dd'T'HH:MM:ss.000000+00:00"
+  const timeSteps = process.env.LOG_TIME_STEPS ||   "1"
+  const timeSkew = process.env.LOG_TIME_SKEW ||   "60"
+  const timeZone = process.env.LOG_TIME_ZONE ||   "-1"
+  
   try {
     console.log("  **************************************************************************************************");
     console.log("   📛 Generating Demo Log Anomalies from Config Map");
 
+
+    closeStories();
+    closeAlerts();
+
     var kafkaMessage = ""
-    var dateFull = Date.now();
+    //var dateFull = new Date().toISOString();
+    //
+    // 2022-03-08T17:41:56.000000+00:00
+    //"yyyy-mm-ddTh:MM:ss.000000+00:00"
+    //    
+    //var dateFull=dateFormat(now, "isoDateTime");
+    var now = new Date();
+    //Add Skew in seconds
+    var parsedDate = new Date(Date.parse(now))
+    console.log(`         🕦 Now                  ${parsedDate}`);
+
+    now = new Date(parsedDate.getTime() + (1000 * 60 * 60 * timeZone))
+    parsedDate = new Date(Date.parse(now))
+    console.log(`         🕦 Adjusted TZ          ${parsedDate}`);
+
+    now = new Date(parsedDate.getTime() + (1000 * timeSkew))
+    parsedDate = new Date(Date.parse(now))
+    console.log(`         🕦 Adjusted Skew        ${parsedDate}`);
+
+    var dateFull=dateFormat(now,timeFormat);
+    console.log(`         🕦 Date Formatted       ${dateFull}`);
 
     for (let step = 0; step < iterations; step++) {
 
       var array = payload.toString().split("\n");
       for (i in array) {
 
-        dateFull = dateFull + 1000;
+        // Add step time in ms
+        now = new Date(parsedDate.getTime() + (1000*timeSteps))
+        parsedDate = new Date(Date.parse(now))
+        //console.log(`         🕦 Adjusted Step   ${parsedDate}`);
+
+
+        dateFull=dateFormat(now,timeFormat);
+
+        //console.log(`         💚 DATE ${dateFull}`);
+
         var objectToIterate = array[i]
-        var actTimestampElement = dateFull;
-        var formattedTimestamp = `${actTimestampElement}`.substring(0, 10);
-        actKafkaLine = objectToIterate.replace("MY_TIMESTAMP", formattedTimestamp)
+        actKafkaLine = objectToIterate.replace("MY_TIMESTAMP", dateFull)
 
         kafka.sendToKafkaLog(actKafkaLine)
 
       }
-      console.log(`         📥 Logs:     Injected ${i} Log Lines`);
+      console.log(`         📥 Logs:     Injected ${i} Log Lines at ${parsedDate}`);
 
     }
   } catch (ex) {

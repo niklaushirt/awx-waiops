@@ -8,15 +8,28 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # Install RobotShop
 # --------------------------------------------------------------------------------------------------------------------------------------
+- name: TIMESTAMP -              🟢 START - INSTALL DEMO APPS
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
 
 
+- name: LOGGING -              🟢 WRITE TO LOGFILE
+  shell: |
+    export MESSAGE="Installing Demo Apps"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../installAIManager.log
+    echo $currentDate" - "$USER" - "$MESSAGE  >> ../installAIManager.log
+  ignore_errors: yes
 
 
 - name: DEMO -               🔎 Check RobotShop
-  k8s_info:
-    kind: Namespace
-    name: "robot-shop"
-  register: DEMO_EXISTS 
+  shell: |
+    oc get namespace --ignore-not-found robot-shop
+  ignore_errors: yes
+  register: OBJECT_EXISTS
+
+
+
 
 - name: DEMO -               🚀 Install RobotShop
   block:
@@ -52,35 +65,9 @@
       namespace: robot-shop
       src: ./templates/demo_apps/robotshop/load-deployment.yaml
     #when: INSTALL_DEMO_APPS == true
-  when: DEMO_EXISTS .resources|length == 0
+  when: OBJECT_EXISTS.stdout|length == 0
 
 
 
-  # --------------------------------------------------------------------------------------------------------------------------------------
-  # Install Kubetoy
-  # --------------------------------------------------------------------------------------------------------------------------------------
-- name: DEMO -               🔎 Check Kubetoy
-  k8s_info:
-    kind: Namespace
-    name: "kubetoy"
-  register: DEMO_EXISTS 
 
-- name: DEMO -               🚀 Install Kubetoy
-  block:
-  - name: DEMO -               🚀 Create kubetoy namespace
-    kubernetes.core.k8s:
-      api_version: v1
-      kind: Namespace
-      name: "kubetoy"
-      state: present
-    #when: INSTALL_DEMO_APPS == true
-            
-
-  - name: DEMO -               🚀 Create kubetoy application
-    kubernetes.core.k8s:
-      state: present
-      namespace: kubetoy
-      src: ./templates/demo_apps/kubetoy/kubetoy_all_in_one.yaml
-    #when: INSTALL_DEMO_APPS == true
-  when: DEMO_EXISTS .resources|length == 0
 

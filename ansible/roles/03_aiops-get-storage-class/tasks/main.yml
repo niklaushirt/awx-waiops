@@ -12,6 +12,10 @@
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 # ---------------------------------------------------------------------------------------------------------------------------------------------------"
 
+- name: TIMESTAMP -              🟢 START - STORAGE CLASS
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
 
 # *************************************************************************************************************************************************
 # --------------------------------------------------------------------------------------------------------------------------------------
@@ -19,7 +23,7 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # *************************************************************************************************************************************************
 - name: STORAGECLASS -       👓 Load parameters
-  include_vars: ./00_config_cp4waiops.yaml
+  include_vars: ../00_config_cp4waiops.yaml
 
 
 # *************************************************************************************************************************************************
@@ -34,6 +38,9 @@
     echo ${CLUSTER_FQDN##*console.}
   register: CLUSTER_NAME
 
+- name: PLATFORM -           🌏 Check Cluster Connectivity
+  fail: msg="You must be logged in to the server!"
+  when: CLUSTER_NAME.stdout==""
 
 # --------------------------------------------------------------------------------------------------------------------------------------
 # If Storage Classes are overridden
@@ -54,17 +61,17 @@
 - name: STORAGECLASS -       ☑️  Determine File Storage Class
   shell: |
       CLUSTER_NAME={{ CLUSTER_NAME.stdout_lines[0] }}
-      if [[ $CLUSTER_NAME =~ "fyre.ibm.com" ]];
+      if [ -z "${CLUSTER_NAME##*fyre.ibm.com*}" ];
       then
           echo "rook-cephfs"
       else
-        if [[ $CLUSTER_NAME =~ "appdomain.cloud" ]];
+        if [ -z "${CLUSTER_NAME##*appdomain.cloud*}" ]; 
         then
             echo "ibmc-file-gold-gid"
         else
           # Use Default Class (storageclass.kubernetes.io/is-default-class:true)
           SC_DEFAULT_STRING=$(oc get sc | grep "(default)")
-          if [[ $SC_DEFAULT_STRING =~ "(default)" ]];
+          if [ -z "${SC_DEFAULT_STRING##*(default)*}" ];
           then
             echo ${SC_DEFAULT_STRING//\(*} 
           else
@@ -77,6 +84,8 @@
       fi
   register: INSTALL_DETECTED_STORAGECLASS
   when: STORAGECLASS_FILE_OVERRIDE=="not_configured"
+  #args:
+  #  executable: /bin/bash
 
 
 
@@ -86,17 +95,17 @@
 - name: STORAGECLASS -       ☑️  Determine Block Storage Class
   shell: |
       CLUSTER_NAME={{ CLUSTER_NAME.stdout_lines[0] }}
-      if [[ $CLUSTER_NAME =~ "fyre.ibm.com" ]];
+      if [ -z "${CLUSTER_NAME##*fyre.ibm.com*}" ]; 
       then
           echo "rook-ceph-block"
       else
-        if [[ $CLUSTER_NAME =~ "appdomain.cloud" ]];
+        if [ -z "${CLUSTER_NAME##*appdomain.cloud*}" ]; 
         then
             echo "ibmc-block-gold"
         else
           # Use Default Class (storageclass.kubernetes.io/is-default-class:true)
           SC_DEFAULT_STRING=$(oc get sc | grep "(default)")
-          if [[ $SC_DEFAULT_STRING =~ "(default)" ]];
+          if [ -z "${SC_DEFAULT_STRING##*(default)*}" ]; 
           then
             echo ${SC_DEFAULT_STRING//\(*} 
           else
@@ -109,7 +118,8 @@
       fi
   register: INSTALL_DETECTED_BLOCK_STORAGECLASS
   when: STORAGECLASS_BLOCK_OVERRIDE=="not_configured"
-
+  #args:
+  #  executable: /bin/bash
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------
@@ -134,7 +144,7 @@
 - name: STORAGECLASS -       ☑️  Check File Storage Class exists {{ WAIOPS_STORAGE_CLASS_FILE }}
   shell: |
           SC_EXISTS=$(oc get sc {{ WAIOPS_STORAGE_CLASS_FILE }} --ignore-not-found --no-headers| wc -l|tr -d ' ')
-          if [[ $SC_EXISTS -gt 0 ]];
+          if [ $SC_EXISTS -gt 0 ];
           then
             echo "OK"
           else
@@ -143,7 +153,8 @@
             exit 1
           fi     
   register: INSTALL_DETECTED_BLOCK_STORAGECLASS
-
+  args:
+    executable: /bin/bash
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------
@@ -152,7 +163,7 @@
 - name: STORAGECLASS -       ☑️  Check Large Block Storage Class exists {{ WAIOPS_STORAGE_CLASS_LARGE_BLOCK }}
   shell: |
           SC_EXISTS=$(oc get sc {{ WAIOPS_STORAGE_CLASS_LARGE_BLOCK }} --ignore-not-found --no-headers| wc -l|tr -d ' ')
-          if [[ $SC_EXISTS -gt 0 ]];
+          if [ $SC_EXISTS -gt 0 ];
           then
             echo "OK"
           else
@@ -161,7 +172,8 @@
             exit 1
           fi     
   register: INSTALL_DETECTED_BLOCK_STORAGECLASS
-
+  args:
+    executable: /bin/bash
 
 
 - name: STORAGECLASS -       💿 Storage Class 
@@ -171,3 +183,12 @@
     - " CP4WAIOPS Storage Class File:          {{WAIOPS_STORAGE_CLASS_FILE}}"
     - " CP4WAIOPS Storage Class Large Block:   {{WAIOPS_STORAGE_CLASS_LARGE_BLOCK}}"
 
+- name: LOGGING -              🟢 WRITE TO LOGFILE
+  shell: |
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../installAIManager.log
+    echo $currentDate" - "$USER" - ""Global Storage Classes for CP4WAIOPS installation:"  >> ../installAIManager.log
+    echo $currentDate" - "$USER" - "" CP4WAIOPS Storage Class File:          {{WAIOPS_STORAGE_CLASS_FILE}}"  >> ../installAIManager.log
+    echo $currentDate" - "$USER" - "" CP4WAIOPS Storage Class Large Block:   {{WAIOPS_STORAGE_CLASS_LARGE_BLOCK}}"  >> ../installAIManager.log
+
+  ignore_errors: yes

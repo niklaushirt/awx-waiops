@@ -2,7 +2,7 @@ extends layout
 
 block title
   h1 AIManager
-  h2 Demo UI
+  p(style='font-size:30px;') Demo UI
 
 
 block navigation
@@ -13,13 +13,13 @@ block navigation
 
 
 block content
-  h2 🔐 Please enter Token
+  p(style='font-size:50px;') 🔐 Please enter the Access Token
   p 
   p 
   p 
   form(action='/login' method='GET')
-    label TOKEN
     input#exampleFormControlInput1.form-control(type='password' name='token' required='' placeholder='my-token')
+    p
     button.btn.btn-danger.mb-3(type='reset') Reset
     button.btn.btn-success.mb-3(type='submit') Authenticate
 

@@ -13,7 +13,7 @@ Here are the steps to follow:
 1. [Create Slack Integration](4_slack_integrate.md)
 1. [Get the Integration URL - Public Cloud (ROKS, ...)](5_slack_url_public.md)  OR [Get the Integration URL - Private Cloud (Fyre, Skytap, TEC, ...)](5_slack_url_private.md)
 1. [Create Slack App Communications](6_slack_app_integration.md)
-1. [Prepare Slack Reset](7_slack_reset.md)
+1. [Slack Reset](7_slack_reset.md)
 
 
 

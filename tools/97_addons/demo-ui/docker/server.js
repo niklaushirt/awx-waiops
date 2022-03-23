@@ -1,6 +1,7 @@
 const express = require("express");
 const routes = require("./routes");
 const bodyParser = require('body-parser');
+
 var path = require('path');
 
 // App
@@ -13,6 +14,14 @@ const kafkaTopicEvents = process.env.KAFKA_TOPIC_EVENTS || "cp4waiops-cartridge-
 const kafkaTopicLogs = process.env.KAFKA_TOPIC_LOGS || "cp4waiops-cartridge-logs-CREATE-NOI-INTEGRATION"
 const iterations = process.env.LOG_ITERATIONS || "5"
 const token = process.env.TOKEN || ""
+const timeFormat = process.env.LOG_TIME_FORMAT ||   "yyyy-mm-dd'T'HH:MM:ss.000000+00:00"
+const timeSteps = process.env.LOG_TIME_STEPS ||   "1000"
+const timeSkew = process.env.LOG_TIME_SKEW ||   "60"
+const timeZone = process.env.LOG_TIME_ZONE ||   "-1"
+const dlRoute = process.env.DATALAYER_ROUTE ||   "https://ibm.com"
+const dlAuth = process.env.USER_PASS ||   "https://ibm.com"
+
+
 
 
 global.logs=true
@@ -71,6 +80,16 @@ console.log(`           KafkaTopic Logs:    ${kafkaTopicLogs}`);
 console.log("");
 console.log(`           Log Iterations:     ${iterations}`);
 console.log("");
+console.log(`           Logs Time Format:   ${timeFormat}`);
+console.log(`           Logs Time Step:     ${timeSteps}`);
+console.log(`           Logs Time Skew:     ${timeSkew}`);
+console.log(`           Logs Time Zone:     ${timeZone}`);
+console.log("");
+console.log(`           Datalayer Route:    ${dlRoute}`);
+console.log(`           Datalayer AUTH:     ${dlAuth}`);
+
+console.log("");
+
 console.log(`           Token:              ${token}`);
 console.log("");
 console.log("    **************************************************************************************************");

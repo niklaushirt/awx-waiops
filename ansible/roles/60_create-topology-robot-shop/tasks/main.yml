@@ -8,6 +8,19 @@
 # --------------------------------------------------------------------------------------------------------------------------------------
 # Create Topology Merge Rules
 # --------------------------------------------------------------------------------------------------------------------------------------
+- name: TIMESTAMP -              🟢 START - CREATE ROBOTSHOP TOPOLOGY
+  debug: 
+    msg="{{ lookup('pipe','date +%d.%m.%Y---%H:%M:%S') }}"
+
+
+- name: LOGGING -              🟢 WRITE TO LOGFILE
+  shell: |
+    export MESSAGE="Create RobotShop Topology"
+    export currentDate=$(date +%Y-%m-%d_%H:%M)
+    echo "---------------------------------------------------------------------------------------------------------------------------------------------------" >> ../installAIManager.log
+    echo $currentDate" - "$USER" - "$MESSAGE  >> ../installAIManager.log
+  ignore_errors: yes
+
 
 - name: TOPOLOGY     -      🌏 Get Cluster FQDN
   shell: |
@@ -18,15 +31,16 @@
 
 
 
+
 - name: TOPOLOGY     -      🔐 Get EventManager REST USER
   shell: |
-    echo "$(oc get secret evtmanager-topology-asm-credentials -n {{ WAIOPS_NAMESPACE }} -o=template --template=\{\{.data.username\}\} | base64 --decode)"
+    echo "$(oc get secret evtmanager-topology-asm-credentials -n {{ WAIOPS_NAMESPACE }} -o jsonpath='{.data.username}' | base64 --decode)"
   register: EVTMGR_REST_USR
 
 
 - name: TOPOLOGY     -      🔐 Get EventManager REST PASSWORD
   shell: |
-    echo "$(oc get secret evtmanager-topology-asm-credentials -n {{ WAIOPS_NAMESPACE }} -o=template --template=\{\{.data.password\}\} | base64 --decode)"
+    echo "$(oc get secret evtmanager-topology-asm-credentials -n {{ WAIOPS_NAMESPACE }} -o jsonpath='{.data.password}' | base64 --decode)"
   register: EVTMGR_REST_PWD
 
 
