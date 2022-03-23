@@ -176,7 +176,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 02"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 02",
+    "name": "02_Install CP4WAIOPS AI Manager Demo - Step 02",
     "description": "Install CP4WAIOPS AI Manager Demo - Step 02 - Post Install - See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#4-ai-manager-post-install-configuration",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
@@ -202,7 +202,7 @@ echo "   🚀  Create Job: Install CP4WAIOPS AI Manager Demo - Step 03"
 export result=$(curl -X "POST" -s "https://$AWX_ROUTE/api/v2/job_templates/" -u "$ADMIN_USER:$ADMIN_PASSWORD" --insecure \
 -H 'content-type: application/json' \
 -d $'{
-    "name": "01_Install CP4WAIOPS AI Manager Demo - Step 03",
+    "name": "03_Install CP4WAIOPS AI Manager Demo - Step 03",
     "description": "Install CP4WAIOPS AI Manager Demo - Step 03 - Finalize Install - See here https://github.ibm.com/NIKH/aiops-install-ansible-fvt-33#5-ai-manager-finalize-configuration",
     "job_type": "run",
     "inventory": '$INVENTORY_ID',
